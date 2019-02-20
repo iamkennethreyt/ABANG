@@ -12,6 +12,7 @@ const router = express.Router();
 const SignInInput = require("../../validations/ValidateUserInput/SignInInput");
 const SignUpInput = require("../../validations/ValidateUserInput/SignUpInput");
 const PhoneNumberInput = require("../../validations/ValidateUserInput/PhoneNumberInput");
+const ChangePasswordInput = require("../../validations/ValidateUserInput/ChangePasswordInput");
 
 //load User model
 const User = require("../../models/User");
@@ -137,6 +138,48 @@ router.put(
         { $set: userFields },
         { new: true }
       ).then(newProfile => res.json(newProfile));
+    });
+  }
+);
+
+//@route    PUT api/users/settings/password
+//@desc     user settings change password
+//@access   private
+router.put(
+  "/settings/password",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = ChangePasswordInput(req.body);
+
+    //check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    //check password
+    bcrypt.compare(req.body.password, req.user.password).then(isMatch => {
+      if (isMatch) {
+        User.findById(req.user.id, (err, user) => {
+          if (err) throw err;
+
+          bcrypt.genSalt(10, (err, salt) => {
+            if (err) throw err;
+
+            bcrypt.hash(req.body.password3, salt, (err, hash) => {
+              if (err) throw err;
+
+              user.password = hash;
+              user
+                .save()
+                .then(user => res.json(user))
+                .catch(err => res.status(400).json(err));
+            });
+          });
+        });
+      } else {
+        errors.password = "Password is incorrect";
+        return res.status(400).json(errors);
+      }
     });
   }
 );
