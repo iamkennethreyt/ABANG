@@ -1,0 +1,31 @@
+{
+  "name": "abang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamkennethreyt/ABANG.git"
+  },
+  "author": "Kenneth Rey Tamis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamkennethreyt/ABANG/issues"
+  },
+  "homepage": "https://github.com/iamkennethreyt/ABANG#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parse": "^0.1.0",
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.4.14",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.11.0"
+  }
+}
