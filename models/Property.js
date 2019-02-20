@@ -23,7 +23,7 @@ const PropertySchema = new Schema({
     type: String,
     required: true
   },
-  location: {
+  coordinates: {
     lat: {
       type: String,
       required: true
