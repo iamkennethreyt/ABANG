@@ -2,13 +2,16 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const router = express.Router();
 const _ = require("lodash");
+
 const key = require("../../config/key").secretOrkey;
+
+const router = express.Router();
 
 //load validation
 const SignInInput = require("../../validations/ValidateUserInput/SignInInput");
 const SignUpInput = require("../../validations/ValidateUserInput/SignUpInput");
+const PhoneNumberInput = require("../../validations/ValidateUserInput/PhoneNumberInput");
 
 //load User model
 const User = require("../../models/User");
@@ -96,5 +99,96 @@ router.post("/signin", (req, res) => {
     });
   });
 });
+
+//@route    GET api/users/profile
+//@desc     return current user
+//@access   private
+router.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json(req.user);
+  }
+);
+
+//@route    PUT api/users/settings/account
+//@desc     account settings of the current logged in user
+//@access   private
+router.put(
+  "/settings/account",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const userFields = {};
+
+    User.findOne({ email: req.body.email }).then(user => {
+      if (user) {
+        return res.status(400).json({ email: "Email already exists" });
+      }
+
+      if (req.body.name) userFields.name = req.body.name;
+      if (req.body.email) userFields.email = req.body.email;
+      if (req.body.completeaddress)
+        userFields.completeaddress = req.body.completeaddress;
+      if (req.body.details) userFields.details = req.body.details;
+      if (req.body.type) userFields.type = req.body.type;
+
+      User.findOneAndUpdate(
+        { _id: req.user.id },
+        { $set: userFields },
+        { new: true }
+      ).then(newProfile => res.json(newProfile));
+    });
+  }
+);
+
+//@route    POST api/users/phonenumber
+//@desc     add phone number to the current user
+//@access   private
+router.post(
+  "/phonenumber",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = PhoneNumberInput(req.body);
+
+    //check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    User.findById(req.user.id).then(user => {
+      const newPN = {
+        network: req.body.network,
+        phonenumber: req.body.phonenumber
+      };
+
+      const findNumber = _.find(user.contactinfo, {
+        phonenumber: req.body.phonenumber
+      });
+
+      if (findNumber) {
+        return res
+          .status(400)
+          .json({ phonenumber: "This phone number is already exist" });
+      }
+
+      user.contactinfo.unshift(newPN);
+      user.save().then(user => res.json(user));
+    });
+  }
+);
+
+//@route    DELETE api/users/phonenumber
+//@desc     delete phone number to the current user
+//@access   private
+router.delete(
+  "/phonenumber",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findOneAndUpdate(
+      { _id: req.user.id },
+      { $pull: { contactinfo: { _id: req.body._id } } },
+      { new: true }
+    ).then(newProfile => res.json(newProfile));
+  }
+);
 
 module.exports = router;
