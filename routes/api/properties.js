@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const _ = require("lodash");
 
 // Advertisement model
 const Property = require("../../models/Property");
 
 // Validation
 const AddProperty = require("../../validations/ValidatePropertyInput/AddProperty");
-const PhoneNumberInput = require("../../validations/ValidateUserInput/PhoneNumberInput");
+const PhoneNumberInput = require("../../validations/ValidatePropertyInput/PhoneNumberInput");
 
 // @route   POST /api/properties
 // @desc    Create Property
