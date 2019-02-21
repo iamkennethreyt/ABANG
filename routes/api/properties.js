@@ -10,6 +10,32 @@ const Property = require("../../models/Property");
 const AddProperty = require("../../validations/ValidatePropertyInput/AddProperty");
 const PhoneNumberInput = require("../../validations/ValidatePropertyInput/PhoneNumberInput");
 
+const myReturn = props => {
+  const {
+    coordinates,
+    _id,
+    user,
+    name,
+    type,
+    completeaddress,
+    contactinfo,
+    feedbacks,
+    ratings
+  } = props;
+
+  return {
+    coordinates,
+    _id,
+    user,
+    name,
+    type,
+    completeaddress,
+    contactinfo,
+    feedbacks,
+    aveRatings: _.round(_.meanBy(ratings, o => o.rating))
+  };
+};
+
 // @route   POST /api/properties
 // @desc    Create Property
 // @access  Private
@@ -69,7 +95,7 @@ router.post(
       }
 
       prop.contactinfo.unshift(newPN);
-      prop.save().then(prop => res.json(prop));
+      prop.save().then(prop => res.json(myReturn(prop)));
     });
   }
 );
@@ -85,7 +111,7 @@ router.delete(
       { _id: req.params.id },
       { $pull: { contactinfo: { _id: req.body._id } } },
       { new: true }
-    ).then(newProfile => res.json(newProfile));
+    ).then(newProfile => res.json(myReturn(newProfile)));
   }
 );
 
@@ -99,7 +125,7 @@ router.get(
     Property.find()
       .populate("user", "name email contactinfo")
       .sort({ date: -1 })
-      .then(props => res.json(props))
+      .then(props => res.json(props.map(x => myReturn(x))))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
 );
@@ -113,7 +139,7 @@ router.get(
   (req, res) => {
     Property.findById(req.params.id)
       .populate("user", "name email contactinfo")
-      .then(props => res.json(props))
+      .then(props => res.json(myReturn(props)))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
 );
@@ -126,8 +152,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Property.find({ user: req.user.id })
-      .sort({ date: -1 })
-      .then(props => res.json(props))
+      .then(props => res.json(props.map(x => myReturn(x))))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
 );
@@ -143,6 +168,71 @@ router.get(
       .sort({ date: -1 })
       .then(props => res.json(props))
       .catch(err => res.status(404).json({ property: "No properties found" }));
+  }
+);
+
+// @route   PUT api/properties/rating/:id
+// @desc    Add ratings to the properties
+// @access  Private
+router.put(
+  "/rating/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (_.isEmpty(req.body.rating)) {
+      return res.status(400).json({ rating: "rating is required" });
+    }
+
+    Property.findById(req.params.id).then(prop => {
+      if (!prop) {
+        return res.status(400).json({ property: "property params not found" });
+      }
+
+      const newRating = {
+        user: req.user.id,
+        rating: req.body.rating
+      };
+
+      const found = prop.ratings.find(o => {
+        return o.user == req.user.id;
+      });
+
+      if (!found) {
+        prop.ratings.unshift(newRating);
+        prop.save().then(prop => res.json(prop));
+      } else {
+        Property.findOneAndUpdate(
+          { _id: req.params.id, "ratings.user": req.user.id },
+          { $set: { "ratings.$.rating": req.body.rating } },
+          { new: true }
+        ).then(newProf => {
+          res.json(myReturn(newProf));
+        });
+      }
+    });
+  }
+);
+
+// @route   PUT api/properties/feedback/:id
+// @desc    Add feedback
+// @access  Private
+router.put(
+  "/feedback/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (_.isEmpty(req.body.feedback)) {
+      return res.status(400).json({ feedback: "feedback field is required" });
+    }
+    Property.findById(req.params.id).then(prop => {
+      if (!prop) {
+        return res.status(400).json({ property: "property not found" });
+      }
+      const newProp = {
+        user: req.user.id,
+        feedback: req.body.feedback
+      };
+      prop.feedbacks.unshift(newProp);
+      prop.save().then(props => res.json(myReturn(props)));
+    });
   }
 );
 
