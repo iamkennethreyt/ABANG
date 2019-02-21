@@ -7,6 +7,7 @@ const Property = require("../../models/Property");
 
 // Validation
 const AddProperty = require("../../validations/ValidatePropertyInput/AddProperty");
+const PhoneNumberInput = require("../../validations/ValidateUserInput/PhoneNumberInput");
 
 // @route   POST /api/properties
 // @desc    Create Property
@@ -37,6 +38,56 @@ router.post(
   }
 );
 
+//@route    POST api/properties/phonenumber
+//@desc     add phone number of property based on params
+//@access   private
+router.post(
+  "/phonenumber/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = PhoneNumberInput(req.body);
+
+    //check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    Property.findById(req.params.id).then(prop => {
+      const newPN = {
+        network: req.body.network,
+        phonenumber: req.body.phonenumber
+      };
+
+      const findNumber = _.find(prop.contactinfo, {
+        phonenumber: req.body.phonenumber
+      });
+
+      if (findNumber) {
+        return res
+          .status(400)
+          .json({ phonenumber: "This phone number is already exist" });
+      }
+
+      prop.contactinfo.unshift(newPN);
+      prop.save().then(prop => res.json(prop));
+    });
+  }
+);
+
+//@route    DELETE api/properties/phonenumber
+//@desc     delete phone number of property based on params
+//@access   private
+router.delete(
+  "/phonenumber/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Property.findOneAndUpdate(
+      { _id: req.params.id },
+      { $pull: { contactinfo: { _id: req.body._id } } },
+      { new: true }
+    ).then(newProfile => res.json(newProfile));
+  }
+);
+
 // @route   GET api/properties
 // @desc    Show all Property
 // @access  Private
@@ -52,11 +103,25 @@ router.get(
   }
 );
 
-// @route   GET api/properties
-// @desc    Show all Property
+// @route   GET api/properties/property/:id
+// @desc    Show single Property based on the parameter
 // @access  Private
 router.get(
-  "/own",
+  "/property/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Property.findById(req.params.id)
+      .populate("user", "name email contactinfo")
+      .then(props => res.json(props))
+      .catch(err => res.status(404).json({ property: "No properties found" }));
+  }
+);
+
+// @route   GET api/properties/currentuser
+// @desc    Show all the properties of the current user
+// @access  Private
+router.get(
+  "/currentuser",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Property.find({ user: req.user.id })
@@ -66,15 +131,15 @@ router.get(
   }
 );
 
-// @route   GET api/properties/:id
-// @desc    Show single Property based on the parameter
+// @route   GET api/properties/user/:id
+// @desc    Show all the properties of the user based on the params id
 // @access  Private
 router.get(
-  "/:id",
+  "/user/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Property.findById(req.params.id)
-      .populate("user", "name email contactinfo")
+    Property.find({ user: req.params.id })
+      .sort({ date: -1 })
       .then(props => res.json(props))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
