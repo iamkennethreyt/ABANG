@@ -32,7 +32,8 @@ const myReturn = props => {
     completeaddress,
     contactinfo,
     feedbacks,
-    aveRatings: _.round(_.meanBy(ratings, o => o.rating))
+    aveRatings: _.round(_.meanBy(ratings, o => o.rating)),
+    feedbacksLength: feedbacks.length
   };
 };
 
@@ -79,23 +80,30 @@ router.post(
       return res.status(400).json(errors);
     }
     Property.findById(req.params.id).then(prop => {
-      const newPN = {
-        network: req.body.network,
-        phonenumber: req.body.phonenumber
-      };
-
-      const findNumber = _.find(prop.contactinfo, {
-        phonenumber: req.body.phonenumber
-      });
-
-      if (findNumber) {
+      if (
+        _.find(prop.contactinfo, {
+          phonenumber: req.body.phonenumber
+        })
+      ) {
         return res
           .status(400)
           .json({ phonenumber: "This phone number is already exist" });
       }
 
-      prop.contactinfo.unshift(newPN);
-      prop.save().then(prop => res.json(myReturn(prop)));
+      const contactinfo = {
+        phonenumber: req.body.phonenumber,
+        network: req.body.network
+      };
+
+      Property.findOneAndUpdate(
+        { _id: req.params.id },
+        { $push: { contactinfo } },
+        { new: true }
+      )
+        .populate("feedbacks.user", "name")
+        .then(newProf => {
+          res.json(myReturn(newProf));
+        });
     });
   }
 );
@@ -111,7 +119,10 @@ router.delete(
       { _id: req.params.id },
       { $pull: { contactinfo: { _id: req.body._id } } },
       { new: true }
-    ).then(newProfile => res.json(myReturn(newProfile)));
+    )
+      .populate("feedbacks.user", "name")
+      .then(props => res.json(myReturn(props)))
+      .catch(err => res.status(400).json(err));
   }
 );
 
@@ -139,8 +150,9 @@ router.get(
   (req, res) => {
     Property.findById(req.params.id)
       .populate("user", "name email contactinfo")
+      .populate("feedbacks.user", "name")
       .then(props => res.json(myReturn(props)))
-      .catch(err => res.status(404).json({ property: "No properties found" }));
+      .catch(() => res.status(404).json({ property: "No properties found" }));
   }
 );
 
@@ -152,6 +164,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Property.find({ user: req.user.id })
+      .populate("feedbacks.user", "name")
       .then(props => res.json(props.map(x => myReturn(x))))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
@@ -165,8 +178,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Property.find({ user: req.params.id })
-      .sort({ date: -1 })
-      .then(props => res.json(props))
+      .then(props => res.json(props.map(x => myReturn(x))))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
 );
@@ -204,9 +216,11 @@ router.put(
           { _id: req.params.id, "ratings.user": req.user.id },
           { $set: { "ratings.$.rating": req.body.rating } },
           { new: true }
-        ).then(newProf => {
-          res.json(myReturn(newProf));
-        });
+        )
+          .populate("feedbacks.user", "name")
+          .then(newProf => {
+            res.json(myReturn(newProf));
+          });
       }
     });
   }
@@ -222,17 +236,21 @@ router.put(
     if (_.isEmpty(req.body.feedback)) {
       return res.status(400).json({ feedback: "feedback field is required" });
     }
-    Property.findById(req.params.id).then(prop => {
-      if (!prop) {
-        return res.status(400).json({ property: "property not found" });
-      }
-      const newProp = {
-        user: req.user.id,
-        feedback: req.body.feedback
-      };
-      prop.feedbacks.unshift(newProp);
-      prop.save().then(props => res.json(myReturn(props)));
-    });
+
+    Property.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: {
+          feedbacks: { feedback: req.body.feedback, user: req.user.id },
+          $sort: { date: -1 }
+        }
+      },
+      { new: true }
+    )
+      .populate("feedbacks.user", "name")
+      .then(newProf => {
+        res.json(myReturn(newProf));
+      });
   }
 );
 
