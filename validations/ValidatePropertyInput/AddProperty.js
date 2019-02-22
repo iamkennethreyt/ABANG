@@ -1,7 +1,7 @@
 const validator = require("validator");
 const _ = require("lodash");
 
-module.exports = function SignUpInput(data) {
+module.exports = function AddProperty(data) {
   let errors = {};
 
   data.name = !_.isEmpty(data.name) ? data.name : "";

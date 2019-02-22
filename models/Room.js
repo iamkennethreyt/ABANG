@@ -27,10 +27,22 @@ const PropertySchema = new Schema({
     type: [String],
     required: true
   },
+  images: [
+    {
+      path: {
+        type: String,
+        required: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   date: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = Propery = mongoose.model("properties", PropertySchema);
+module.exports = Propery = mongoose.model("rooms", PropertySchema);
