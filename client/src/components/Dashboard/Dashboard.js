@@ -1,9 +1,13 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 
 class DashBoard extends Component {
   state = {};
   render() {
-    return <Fragment>dashboard</Fragment>;
+    return (
+      <div>
+        <h1>DashBoard</h1>
+      </div>
+    );
   }
 }
 

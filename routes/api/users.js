@@ -105,10 +105,10 @@ router.post("/signin", (req, res) => {
 //@desc     return current user
 //@access   private
 router.get(
-  "/profile",
+  "/profile/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json(req.user);
+    User.findById(req.params.id).then(user => res.json(user));
   }
 );
 

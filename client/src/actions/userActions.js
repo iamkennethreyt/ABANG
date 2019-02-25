@@ -2,7 +2,13 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, PUT_USER } from "./types";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  EDIT_USER,
+  USER_LOADING,
+  GET_USER
+} from "./types";
 
 // Sign up user
 export const signup = (userData, history) => dispatch => {
@@ -41,13 +47,24 @@ export const signin = userData => dispatch => {
     });
 };
 
+//get user
+export const getUser = id => dispatch => {
+  dispatch(setUserLoading());
+  axios.get(`/api/users/profile/${id}`).then(res => {
+    dispatch({
+      type: GET_USER,
+      payload: res.data
+    });
+  });
+};
+
 //profile settings
 export const accountSettings = (newData, history) => dispatch => {
   axios
     .put("/api/users/settings/account", newData)
     .then(res => {
       dispatch({
-        type: PUT_USER,
+        type: EDIT_USER,
         payload: res.data
       });
       history.push("/");
@@ -91,4 +108,11 @@ export const signout = () => dispatch => {
   setAuthToken(false);
   // Set current user to {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
+};
+
+// User loading
+export const setUserLoading = () => {
+  return {
+    type: USER_LOADING
+  };
 };

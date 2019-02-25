@@ -13,13 +13,13 @@ class SignIn extends Component {
 
   componentDidMount() {
     if (this.props.users.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.users.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/");
     }
 
     if (nextProps.errors) {
@@ -65,7 +65,10 @@ class SignIn extends Component {
               onChange={this.onChange}
               error={errors.password}
             />
-            <button className="btn btn-info btn-block my-4" type="submit">
+            <button
+              className="btn orange darken-4 btn-block my-4"
+              type="submit"
+            >
               Sign in
             </button>
           </form>

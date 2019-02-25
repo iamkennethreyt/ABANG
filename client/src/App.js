@@ -14,6 +14,11 @@ import PrivateRoute from "./components/common/PrivateRoute";
 //COMPONENTS
 import SignIn from "./components/Auth/SignIn";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Lodger from "./components/Auth/SignUp/Lodger";
+import Lessor from "./components/Auth/SignUp/Lessor";
+import Navbar from "./components/layouts/NavBar";
+import Footer from "./components/layouts/Footer";
+import Account from "./components/settings/Account";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -31,14 +36,25 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Fragment>
+            <Navbar />
             <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/signup/lodger" component={Lodger} />
+            <Route exact path="/signup/lessor" component={Lessor} />
             <div>
-              <div className="container">
+              <div className="">
                 <Switch>
                   <PrivateRoute exact path="/" component={Dashboard} />
                 </Switch>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/settings/account"
+                    component={Account}
+                  />
+                </Switch>
               </div>
             </div>
+            <Footer />
           </Fragment>
         </Router>
       </Provider>
