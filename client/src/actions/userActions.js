@@ -80,7 +80,7 @@ export const accountSettings = (newData, history) => dispatch => {
 //update password
 export const passwordSettings = (data, history) => dispatch => {
   axios
-    .put("/api/users/profile/passwordsettings", data)
+    .put("/api/users/settings/password", data)
     .then(() => {
       history.push("/");
     })

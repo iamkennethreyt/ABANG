@@ -41,7 +41,6 @@ class AccountSettings extends Component {
 
     const newUser = {
       name: this.state.name,
-      email: this.state.email,
       completeaddress: this.state.completeaddress
     };
 

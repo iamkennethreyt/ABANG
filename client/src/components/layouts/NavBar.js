@@ -28,11 +28,14 @@ class Navbar extends Component {
             className="dropdown-menu dropdown-primary"
             aria-labelledby="navbarDropdownMenuLink"
           >
-            <a className="dropdown-item" href="/">
-              Action
-            </a>
+            <Link className="dropdown-item" to="/properties">
+              Properties
+            </Link>
             <Link className="dropdown-item" to="/settings/account">
               Account Settings
+            </Link>
+            <Link className="dropdown-item" to="/settings/password">
+              Password Settings
             </Link>
             <a className="dropdown-item" href="/" onClick={this.onLogoutClick}>
               Sign Out

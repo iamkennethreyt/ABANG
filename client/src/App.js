@@ -19,6 +19,8 @@ import Lessor from "./components/Auth/SignUp/Lessor";
 import Navbar from "./components/layouts/NavBar";
 import Footer from "./components/layouts/Footer";
 import Account from "./components/settings/Account";
+import Properties from "./components/properties/Properties";
+import Password from "./components/settings/Password";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -45,11 +47,26 @@ class App extends Component {
                 <Switch>
                   <PrivateRoute exact path="/" component={Dashboard} />
                 </Switch>
+
                 <Switch>
                   <PrivateRoute
                     exact
                     path="/settings/account"
                     component={Account}
+                  />
+                </Switch>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/settings/password"
+                    component={Password}
+                  />
+                </Switch>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/properties"
+                    component={Properties}
                   />
                 </Switch>
               </div>
