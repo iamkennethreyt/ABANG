@@ -112,12 +112,12 @@ router.post(
 //@desc     delete phone number of property based on params
 //@access   private
 router.delete(
-  "/phonenumber/:id",
-  passport.authenticate("jwt", { session: false }),
+  "/phonenumber/:id/:_id",
+  // passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Property.findOneAndUpdate(
       { _id: req.params.id },
-      { $pull: { contactinfo: { _id: req.body._id } } },
+      { $pull: { contactinfo: { _id: req.params._id } } },
       { new: true }
     )
       .populate("feedbacks.user", "name")

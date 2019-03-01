@@ -6,7 +6,6 @@ module.exports = function AddRoom(data) {
 
   data.property = !_.isEmpty(data.property) ? data.property : "";
   data.name = !_.isEmpty(data.name) ? data.name : "";
-  data.type = !_.isEmpty(data.type) ? data.type : "";
   data.details = !_.isEmpty(data.details) ? data.details : "";
   data.price = !_.isEmpty(data.price) ? data.price : "";
   data.amenities = !_.isEmpty(data.amenities) ? data.amenities : "";
@@ -37,10 +36,6 @@ module.exports = function AddRoom(data) {
 
   if (_.isEmpty(data.name)) {
     errors.name = "Name field is required";
-  }
-
-  if (_.isEmpty(data.type)) {
-    errors.type = "Room type field is required";
   }
 
   return {

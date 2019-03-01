@@ -21,6 +21,7 @@ import Footer from "./components/layouts/Footer";
 import Account from "./components/settings/Account";
 import Properties from "./components/properties/Properties";
 import Password from "./components/settings/Password";
+import Property from "./components/properties/Property";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -67,6 +68,13 @@ class App extends Component {
                     exact
                     path="/properties"
                     component={Properties}
+                  />
+                </Switch>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path={`/property/:id`}
+                    component={Property}
                   />
                 </Switch>
               </div>

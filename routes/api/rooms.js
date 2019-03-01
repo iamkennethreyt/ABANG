@@ -15,7 +15,7 @@ const myReturn = param => {
   return {
     _id,
     amenities,
-    roomname: name,
+    name,
     roomtype: type,
     propname: property.name,
     proptype: property.type,
@@ -56,7 +56,6 @@ router.post(
       const newData = new Room({
         property: req.body.property,
         name: req.body.name,
-        type: req.body.type,
         details: req.body.details,
         price: req.body.price,
         amenities: req.body.amenities.split(",")

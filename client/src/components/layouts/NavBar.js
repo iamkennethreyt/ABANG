@@ -86,20 +86,10 @@ class Navbar extends Component {
           <div className="collapse navbar-collapse" id="basicExampleNav">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
-                <a className="nav-link" href="/">
+                <Link className="nav-link" to="/">
                   Home
                   <span className="sr-only">(current)</span>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">
-                  Features
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">
-                  Pricing
-                </a>
+                </Link>
               </li>
             </ul>
             <ul className="navbar-nav">
