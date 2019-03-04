@@ -1,11 +1,8 @@
 import {
-  PROPERTIES_LOADING,
-  ADD_PROPERTY,
-  GET_PROPERTIES,
-  GET_PROPERTY,
   ROOMS_LOADING,
   GET_ROOMS,
-  ADD_ROOM
+  ADD_ROOM,
+  DELETE_ROOM
 } from "../actions/types";
 
 const initialState = {
@@ -32,6 +29,11 @@ export default function(state = initialState, action) {
         ...state,
         rooms: [action.payload, ...state.rooms],
         loading: false
+      };
+    case DELETE_ROOM:
+      return {
+        ...state,
+        rooms: state.rooms.filter(room => room._id !== action.payload._id)
       };
     default:
       return state;

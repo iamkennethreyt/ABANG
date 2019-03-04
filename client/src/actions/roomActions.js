@@ -2,14 +2,10 @@ import axios from "axios";
 
 import {
   GET_ERRORS,
-  GET_PROPERTIES,
-  ADD_PROPERTY,
-  PROPERTIES_LOADING,
-  GET_OWN_PROPERTIES,
-  GET_PROPERTY,
   ROOMS_LOADING,
   ADD_ROOM,
-  GET_ROOMS
+  GET_ROOMS,
+  DELETE_ROOM
 } from "./types";
 
 // Add Property
@@ -49,6 +45,17 @@ export const getRoomsByProperty = id => dispatch => {
         payload: {}
       })
     );
+};
+
+//Delete room
+export const deleteRoom = id => dispatch => {
+  console.log(id);
+  axios.delete(`/api/rooms/room/${id}`).then(res =>
+    dispatch({
+      type: DELETE_ROOM,
+      payload: res.data
+    })
+  );
 };
 
 // User loading

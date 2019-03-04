@@ -7,7 +7,11 @@ import {
   addNewPhoneNumber,
   deleteNewPhoneNumber
 } from "../../actions/propertyActions";
-import { addRoom, getRoomsByProperty } from "../../actions/roomActions";
+import {
+  addRoom,
+  getRoomsByProperty,
+  deleteRoom
+} from "../../actions/roomActions";
 import TextAreaGroup from "../common/TextAreaGroup";
 import TextFieldGroup from "../common/TextFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
@@ -263,6 +267,7 @@ class Property extends Component {
               <th scope="col">Room Name</th>
               <th scope="col">Amenities</th>
               <th scope="col">Price</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -279,6 +284,16 @@ class Property extends Component {
                     ))}
                   </td>
                   <td>{room.price}</td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => {
+                        this.props.deleteRoom(room._id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -298,7 +313,8 @@ Property.propTypes = {
   addNewPhoneNumber: PropTypes.func.isRequired,
   deleteNewPhoneNumber: PropTypes.func.isRequired,
   getRoomsByProperty: PropTypes.func.isRequired,
-  addRoom: PropTypes.func.isRequired
+  addRoom: PropTypes.func.isRequired,
+  deleteRoom: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -314,6 +330,7 @@ export default connect(
     getProperty,
     deleteNewPhoneNumber,
     addRoom,
-    getRoomsByProperty
+    getRoomsByProperty,
+    deleteRoom
   }
 )(withRouter(Property));

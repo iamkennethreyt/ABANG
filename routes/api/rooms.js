@@ -148,4 +148,14 @@ router.get(
   }
 );
 
+// @route   DELETE api/rooms/:id
+// @desc    Delete Single Room
+router.delete(
+  "/room/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Room.findByIdAndDelete(req.params.id).then(data => res.json(data));
+  }
+);
+
 module.exports = router;
