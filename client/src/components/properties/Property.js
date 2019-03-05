@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import moment from "moment";
 import {
   getProperty,
   addNewPhoneNumber,
@@ -81,8 +82,6 @@ class Property extends Component {
   };
 
   render() {
-    console.log(this.props.users.user);
-    // console.log(this.props.properties.property.user._id);
     const { errors } = this.state;
     const options = [
       { label: "* Network Type", value: 0 },
@@ -92,7 +91,8 @@ class Property extends Component {
     ];
     return this.props.properties.property.loading ||
       this.props.properties.property === null ||
-      this.props.properties.property === undefined ? (
+      this.props.properties.property === undefined ||
+      this.props.properties.property.user === undefined ? (
       <Spinner />
     ) : (
       <div className="container">
@@ -180,7 +180,8 @@ class Property extends Component {
               </form>
             ) : null}
             <div className="d-flex flex-row-reverse bd-highlight">
-              {this.props.users.user.type === "lessor" ? (
+              {this.props.users.user.id ===
+              this.props.properties.property.user._id ? (
                 <button
                   type="button"
                   className="btn orange darken-4"
@@ -243,7 +244,8 @@ class Property extends Component {
               </form>
             ) : null}
             <div className="d-flex flex-row-reverse bd-highlight">
-              {this.props.users.user.type === "lessor" ? (
+              {this.props.users.user.id ===
+              this.props.properties.property.user._id ? (
                 <button
                   type="button"
                   className="btn orange darken-4"
@@ -260,45 +262,102 @@ class Property extends Component {
           </div>
         </div>
         <h4>Rooms</h4>
-        <table className="table">
-          <thead className="orange darken-4 white-text">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Room Name</th>
-              <th scope="col">Amenities</th>
-              <th scope="col">Price</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.props.rooms.rooms.map((room, i) => {
-              return (
-                <tr key={i}>
-                  <th scope="row">{i + 1}</th>
-                  <td>{room.name}</td>
-                  <td>
-                    {room.amenities.map((amenity, index) => (
-                      <span className="mr-2" key={index}>
-                        <i className="fa fa-check" /> {amenity}
-                      </span>
-                    ))}
-                  </td>
-                  <td>{room.price}</td>
-                  <td>
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={() => {
-                        this.props.deleteRoom(room._id);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+
+        <section className="my-5">
+          {this.props.rooms.rooms.map((room, i) => {
+            return (
+              <div className="row mt-3 border-top p-3" key={i}>
+                <div className="col-lg-4">
+                  <div className="view overlay rounded z-depth-2 mb-lg-0 mb-4">
+                    <img
+                      className="img-fluid"
+                      src="https://mdbootstrap.com/img/Photos/Others/img%20(27).jpg"
+                      alt="yahooo"
+                    />
+                    <div className="mask rgba-white-slight" />
+                  </div>
+                </div>
+                <div className="col-lg-8">
+                  <a href="#!" className="green-text">
+                    <h6 className="font-weight-bold mb-3">
+                      {room.amenities.map((amenity, index) => (
+                        <span className="mr-2" key={index}>
+                          <i className="fa fa-check" /> {amenity}
+                        </span>
+                      ))}
+                    </h6>
+                  </a>
+                  <h3 className="font-weight-bold orange-text mb-3">
+                    <strong>{room.name}</strong>
+                  </h3>
+                  <p>{room.details}</p>
+                  <p>
+                    date posted{" "}
+                    <strong>{moment(room.date).format("LL")}</strong>
+                  </p>
+
+                  <div className="row">
+                    <div className="col-lg-2 col-md-12 mb-4">
+                      <div className="view overlay z-depth-1-half">
+                        <img
+                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(73).jpg"
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-2 col-md-6 mb-4">
+                      <div className="view overlay z-depth-1-half">
+                        <img
+                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(78).jpg"
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-2 col-md-6 mb-4">
+                      <div className="view overlay z-depth-1-half">
+                        <img
+                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(79).jpg"
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-2 col-md-12 mb-4">
+                      <div className="view overlay z-depth-1-half">
+                        <img
+                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(81).jpg"
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-2 col-md-6 mb-4">
+                      <div className="view overlay z-depth-1-half">
+                        <img
+                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(82).jpg"
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-lg-2 col-md-6 mb-4">
+                      <div className="view overlay z-depth-1-half">
+                        <img
+                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(84).jpg"
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </section>
       </div>
     );
   }

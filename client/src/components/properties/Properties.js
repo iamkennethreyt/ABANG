@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { getProperties, addProperty } from "../../actions/propertyActions";
+import { getOwnProperties, addProperty } from "../../actions/propertyActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaGroup from "../common/TextAreaGroup";
 import SelectListGroup from "../common/SelectListGroup";
@@ -20,7 +20,7 @@ class Properties extends Component {
   };
 
   componentDidMount() {
-    this.props.getProperties();
+    this.props.getOwnProperties();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,7 +59,6 @@ class Properties extends Component {
   };
   render() {
     const { errors } = this.state;
-
     let displayInputForm;
 
     // Select options for status
@@ -190,7 +189,7 @@ Properties.propTypes = {
   errors: PropTypes.object.isRequired,
   properties: PropTypes.object.isRequired,
   addProperty: PropTypes.func.isRequired,
-  getProperties: PropTypes.func.isRequired
+  getOwnProperties: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -200,5 +199,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { addProperty, getProperties }
+  { addProperty, getOwnProperties }
 )(withRouter(Properties));

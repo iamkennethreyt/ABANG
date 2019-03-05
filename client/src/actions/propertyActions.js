@@ -48,6 +48,25 @@ export const getProperties = () => dispatch => {
     );
 };
 
+//Get all properties
+export const getOwnProperties = () => dispatch => {
+  dispatch(setPropertyLoading());
+  axios
+    .get("/api/properties/currentuser")
+    .then(res =>
+      dispatch({
+        type: GET_PROPERTIES,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_OWN_PROPERTIES,
+        payload: {}
+      })
+    );
+};
+
 //Get SINGLE property
 export const getProperty = id => dispatch => {
   dispatch(setPropertyLoading());

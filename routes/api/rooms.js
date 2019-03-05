@@ -10,7 +10,7 @@ const User = require("../../models/User");
 const AddRoom = require("../../validations/ValidateRoomInput/AddRoom");
 
 const myReturn = param => {
-  const { _id, amenities, name, type, date, price, property } = param;
+  const { _id, amenities, name, type, date, price, property, details } = param;
 
   return {
     _id,
@@ -19,9 +19,11 @@ const myReturn = param => {
     roomtype: type,
     propname: property.name,
     proptype: property.type,
+    propID: property._id,
     address: property.completeaddress,
     price,
     date,
+    details,
     contactinfo: property.contactinfo,
     user: property.user,
     aveRatings: _.round(_.meanBy(property.ratings, o => o.rating))

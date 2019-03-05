@@ -15,7 +15,6 @@ class Navbar extends Component {
       <React.Fragment>
         <li className="nav-item dropdown">
           <a
-            href="#"
             className="nav-link dropdown-toggle"
             id="navbarDropdownMenuLink"
             data-toggle="dropdown"

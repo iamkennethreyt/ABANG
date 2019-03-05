@@ -29,6 +29,25 @@ export const addRoom = (newData, onSuccess) => dispatch => {
 };
 
 //Get rooms  by id property
+export const getRooms = () => dispatch => {
+  dispatch(setRoomLoading());
+  axios
+    .get(`/api/rooms/`)
+    .then(res =>
+      dispatch({
+        type: GET_ROOMS,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: {},
+        payload: {}
+      })
+    );
+};
+
+//Get rooms  by id property
 export const getRoomsByProperty = id => dispatch => {
   dispatch(setRoomLoading());
   axios
