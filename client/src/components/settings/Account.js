@@ -80,7 +80,7 @@ class AccountSettings extends Component {
             />
 
             <button
-              className="btn orange darken-4 btn-block my-4"
+              className="btn purple darken-4 btn-block my-4"
               type="submit"
             >
               Save Changes

@@ -98,7 +98,7 @@ class Lodger extends Component {
               error={errors.password2}
             />
             <button
-              className="btn orange darken-4 btn-block my-4"
+              className="btn purple darken-4 btn-block my-4"
               type="submit"
             >
               Sign up

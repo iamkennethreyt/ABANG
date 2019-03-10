@@ -121,7 +121,7 @@ class Properties extends Component {
               </div>
 
               <button
-                className="btn orange darken-4 btn-block my-4"
+                className="btn purple darken-4 btn-block my-4"
                 type="submit"
               >
                 Submit
@@ -137,7 +137,7 @@ class Properties extends Component {
         <div className="d-flex flex-row-reverse bd-highlight">
           <button
             type="button"
-            class="btn orange darken-4"
+            class="btn purple darken-4"
             onClick={() => {
               this.setState(prevState => ({
                 displayInputForm: !prevState.displayInputForm

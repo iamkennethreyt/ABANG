@@ -2,145 +2,89 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import moment from "moment";
-import { getRooms } from "../../actions/roomActions";
+import { getProperties } from "../../actions/propertyActions";
 
-import Spinner from "../common/Spinner";
+import GoogleMapReact from "google-map-react";
+
+const AnyReactComponent = ({ text, propID, logo }) => (
+  <div className="font-weight-bold">
+    <i className={`${logo} fa-lg fa-2x`} />
+    <Link to={`/property/${propID}`}>
+      <p>{text}</p>
+    </Link>
+  </div>
+);
 
 class DashBoard extends Component {
   componentDidMount() {
-    this.props.getRooms();
+    this.props.getProperties();
   }
   state = {};
+
+  static defaultProps = {
+    center: {
+      lat: 10.3157,
+      lng: 123.8854
+    },
+    zoom: 16
+  };
+
+  handleLogo = e => {
+    if (e === "Boarding House") {
+      return "fas fa-home red-text";
+    }
+    if (e === "Apartment") {
+      return "fas fa-warehouse blue-text";
+    }
+    if (e === "Hotel") {
+      return "fas fa-hotel green-text";
+    }
+    if (e === "Condo") {
+      return "fas fa-building yellow-text";
+    }
+  };
+
   render() {
     return (
-      <section className="my-5 container">
-        {this.props.rooms.loading ? (
-          <Spinner />
-        ) : (
-          this.props.rooms.rooms.map((room, i) => {
-            return (
-              <div className="row mt-3 border-top p-3" key={i}>
-                <div className="col-lg-4">
-                  <div className="view overlay rounded z-depth-2 mb-lg-0 mb-4">
-                    <img
-                      className="img-fluid"
-                      src="https://mdbootstrap.com/img/Photos/Others/img%20(27).jpg"
-                      alt="yahooo"
-                    />
-                    <div className="mask rgba-white-slight" />
-                  </div>
-                </div>
-                <div className="col-lg-8">
-                  <a href="#!" className="green-text">
-                    <h6 className="font-weight-bold mb-3">
-                      {room.amenities.map((amenity, index) => (
-                        <span className="mr-2" key={index}>
-                          <i className="fa fa-check" /> {amenity}
-                        </span>
-                      ))}
-                    </h6>
-                  </a>
-                  <h3 className="font-weight-bold orange-text mb-3">
-                    <strong>{room.name}</strong>
-                  </h3>
-                  <h6>Contact Info</h6>
-                  {room.contactinfo.map((ci, i) => (
-                    <span className="mr-2" key={i}>
-                      {ci.network} : <strong>{ci.phonenumber}</strong>
-                    </span>
-                  ))}
-
-                  <p>{room.details}</p>
-                  <p>
-                    Name of Property :
-                    <Link to={`/property/${room.propID}`}>{room.propname}</Link>
-                  </p>
-                  <p>
-                    Type of Property :<strong>{room.proptype}</strong>
-                  </p>
-                  <p>
-                    date posted{" "}
-                    <strong>{moment(room.date).format("LL")}</strong>
-                  </p>
-                </div>
-                <div className="row">
-                  <div className="col-lg-2 col-md-12 mb-4">
-                    <div className="view overlay z-depth-1-half">
-                      <img
-                        src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(73).jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-6 mb-4">
-                    <div className="view overlay z-depth-1-half">
-                      <img
-                        src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(78).jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-6 mb-4">
-                    <div className="view overlay z-depth-1-half">
-                      <img
-                        src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(79).jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-12 mb-4">
-                    <div className="view overlay z-depth-1-half">
-                      <img
-                        src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(81).jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-6 mb-4">
-                    <div className="view overlay z-depth-1-half">
-                      <img
-                        src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(82).jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-lg-2 col-md-6 mb-4">
-                    <div className="view overlay z-depth-1-half">
-                      <img
-                        src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(84).jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
+      <section className="container">
+        <div style={{ height: "80vh", width: "100%" }}>
+          <GoogleMapReact
+            bootstrapURLKeys={{
+              key: "AIzaSyCadUpeKGSY6XNsBHB2thxvffwjkJQsaX4"
+            }}
+            defaultCenter={this.props.center}
+            defaultZoom={this.props.zoom}
+          >
+            {this.props.properties.properties.map((p, i) => {
+              return (
+                <AnyReactComponent
+                  key={i}
+                  lat={p.coordinates.lat}
+                  lng={p.coordinates.long}
+                  text={p.name}
+                  propID={p._id}
+                  logo={this.handleLogo(p.type)}
+                />
+              );
+            })}
+          </GoogleMapReact>
+        </div>
       </section>
     );
   }
 }
 
 DashBoard.propTypes = {
-  rooms: PropTypes.object.isRequired,
-  getRooms: PropTypes.func.isRequired
+  properties: PropTypes.object.isRequired,
+  getProperties: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  rooms: state.rooms
+  properties: state.properties
 });
 export default connect(
   mapStateToProps,
   {
-    getRooms
+    getProperties
   }
 )(withRouter(DashBoard));

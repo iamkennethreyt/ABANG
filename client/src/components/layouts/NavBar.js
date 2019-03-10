@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { signout } from "../../actions/userActions";
@@ -9,6 +9,10 @@ class Navbar extends Component {
     e.preventDefault();
     this.props.signout();
   };
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+  }
 
   render() {
     const authContent = (
@@ -62,41 +66,49 @@ class Navbar extends Component {
         </li>
       </React.Fragment>
     );
-
+    console.log("this.props", this.props.location.pathname);
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark orange darken-4">
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            Abang
-          </Link>
+      <div>
+        <div style={{ height: "60px" }} />
 
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#basicExampleNav"
-            aria-controls="basicExampleNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
+        <nav className="navbar navbar-expand-lg navbar-dark purple darken-4 fixed-top">
+          <div className="container">
+            <Link className="navbar-brand" to="/">
+              Abang
+            </Link>
 
-          <div className="collapse navbar-collapse" id="basicExampleNav">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
-                <Link className="nav-link" to="/">
-                  Home
-                  <span className="sr-only">(current)</span>
-                </Link>
-              </li>
-            </ul>
-            <ul className="navbar-nav">
-              {this.props.users.isAuthenticated ? authContent : guestContent}
-            </ul>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#basicExampleNav"
+              aria-controls="basicExampleNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon" />
+            </button>
+
+            <div className="collapse navbar-collapse" id="basicExampleNav">
+              <ul className="navbar-nav mr-auto">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/">
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/rooms">
+                    Room
+                  </Link>
+                </li>
+              </ul>
+              <ul className="navbar-nav">
+                {this.props.users.isAuthenticated ? authContent : guestContent}
+              </ul>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
     );
   }
 }
@@ -113,4 +125,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { signout }
-)(Navbar);
+)(withRouter(Navbar));

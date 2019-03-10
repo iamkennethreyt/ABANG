@@ -67,11 +67,11 @@ class PasswordSettings extends Component {
 
             <button
               type="submit"
-              className="btn orange darken-4 btn-block mt-4 "
+              className="btn purple darken-4 btn-block mt-4 "
             >
               Save Changes
             </button>
-            <Link to="/" className="btn orange darken-4 btn-block mt-2">
+            <Link to="/" className="btn purple darken-4 btn-block mt-2">
               Cancel
             </Link>
           </form>

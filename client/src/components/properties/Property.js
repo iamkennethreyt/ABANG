@@ -81,6 +81,10 @@ class Property extends Component {
     });
   };
 
+  numberWithCommas = x => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   render() {
     const { errors } = this.state;
     const options = [
@@ -172,7 +176,7 @@ class Property extends Component {
                 </div>
 
                 <button
-                  className="btn orange darken-4 btn-block my-4"
+                  className="btn purple darken-4 btn-block my-4"
                   type="submit"
                 >
                   Submit
@@ -184,7 +188,7 @@ class Property extends Component {
               this.props.properties.property.user._id ? (
                 <button
                   type="button"
-                  className="btn orange darken-4"
+                  className="btn purple darken-4"
                   onClick={() => {
                     this.setState(prevState => ({
                       displayInputForm: !prevState.displayInputForm
@@ -236,7 +240,7 @@ class Property extends Component {
                 />
 
                 <button
-                  className="btn orange darken-4 btn-block my-4"
+                  className="btn purple darken-4 btn-block my-4"
                   type="submit"
                 >
                   Submit
@@ -248,7 +252,7 @@ class Property extends Component {
               this.props.properties.property.user._id ? (
                 <button
                   type="button"
-                  className="btn orange darken-4"
+                  className="btn purple darken-4"
                   onClick={() => {
                     this.setState(prevState => ({
                       displayInputRoomForm: !prevState.displayInputRoomForm
@@ -262,7 +266,6 @@ class Property extends Component {
           </div>
         </div>
         <h4>Rooms</h4>
-
         <section className="my-5">
           {this.props.rooms.rooms.map((room, i) => {
             return (
@@ -287,72 +290,17 @@ class Property extends Component {
                       ))}
                     </h6>
                   </a>
-                  <h3 className="font-weight-bold orange-text mb-3">
+                  <h3 className="font-weight-bold purple-text mb-3">
                     <strong>{room.name}</strong>
                   </h3>
+                  <h4 className="font-weight-bold red-text mb-3">
+                    P {this.numberWithCommas(room.price)} per month
+                  </h4>
                   <p>{room.details}</p>
                   <p>
                     date posted{" "}
                     <strong>{moment(room.date).format("LL")}</strong>
                   </p>
-
-                  <div className="row">
-                    <div className="col-lg-2 col-md-12 mb-4">
-                      <div className="view overlay z-depth-1-half">
-                        <img
-                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(73).jpg"
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-2 col-md-6 mb-4">
-                      <div className="view overlay z-depth-1-half">
-                        <img
-                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(78).jpg"
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-2 col-md-6 mb-4">
-                      <div className="view overlay z-depth-1-half">
-                        <img
-                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(79).jpg"
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-2 col-md-12 mb-4">
-                      <div className="view overlay z-depth-1-half">
-                        <img
-                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(81).jpg"
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-2 col-md-6 mb-4">
-                      <div className="view overlay z-depth-1-half">
-                        <img
-                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(82).jpg"
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-
-                    <div className="col-lg-2 col-md-6 mb-4">
-                      <div className="view overlay z-depth-1-half">
-                        <img
-                          src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(84).jpg"
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             );

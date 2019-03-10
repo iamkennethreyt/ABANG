@@ -66,7 +66,7 @@ class SignIn extends Component {
               error={errors.password}
             />
             <button
-              className="btn orange darken-4 btn-block my-4"
+              className="btn purple darken-4 btn-block my-4"
               type="submit"
             >
               Sign in
