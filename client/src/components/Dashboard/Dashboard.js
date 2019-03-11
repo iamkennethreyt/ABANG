@@ -6,14 +6,7 @@ import { getProperties } from "../../actions/propertyActions";
 
 import GoogleMapReact from "google-map-react";
 
-const AnyReactComponent = ({ text, propID, logo }) => (
-  <div className="font-weight-bold">
-    <i className={`${logo} fa-lg fa-2x`} />
-    <Link to={`/property/${propID}`}>
-      <p>{text}</p>
-    </Link>
-  </div>
-);
+const AnyReactComponent = ({ text }) => text;
 
 class DashBoard extends Component {
   componentDidMount() {
@@ -27,21 +20,6 @@ class DashBoard extends Component {
       lng: 123.8854
     },
     zoom: 16
-  };
-
-  handleLogo = e => {
-    if (e === "Boarding House") {
-      return "fas fa-home red-text";
-    }
-    if (e === "Apartment") {
-      return "fas fa-warehouse blue-text";
-    }
-    if (e === "Hotel") {
-      return "fas fa-hotel green-text";
-    }
-    if (e === "Condo") {
-      return "fas fa-building yellow-text";
-    }
   };
 
   render() {
@@ -63,7 +41,6 @@ class DashBoard extends Component {
                   lng={p.coordinates.long}
                   text={p.name}
                   propID={p._id}
-                  logo={this.handleLogo(p.type)}
                 />
               );
             })}

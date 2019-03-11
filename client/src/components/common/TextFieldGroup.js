@@ -1,46 +1,60 @@
 import React from "react";
-import classnames from "classnames";
 import PropTypes from "prop-types";
+
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
 
 const TextFieldGroup = ({
   name,
   placeholder,
   value,
-  label,
   error,
-  info,
   type,
   onChange,
+  defaultValue,
+  multiline,
+  rows,
   disabled
 }) => {
   return (
-    <div className="form-group">
-      <input
-        type={type}
-        className={classnames("form-control form-control-lg", {
-          "is-invalid": error
-        })}
-        placeholder={placeholder}
+    <FormControl fullWidth>
+      <InputLabel htmlFor={name}>{placeholder}</InputLabel>
+      <Input
         name={name}
-        value={value}
+        type={type}
+        id={name}
+        error={error && true}
         onChange={onChange}
+        defaultValue={defaultValue}
+        value={value}
+        placeholder={placeholder}
+        multiline={multiline}
+        rows={rows}
         disabled={disabled}
       />
-      {info && <small className="form-text text-muted">{info}</small>}
-      {error && <div className="invalid-feedback">{error}</div>}
-    </div>
+      {error && (
+        <FormHelperText id={name} error>
+          {error}
+        </FormHelperText>
+      )}
+    </FormControl>
   );
 };
 
 TextFieldGroup.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  defaultValue: PropTypes.string,
   info: PropTypes.string,
   error: PropTypes.string,
   type: PropTypes.string.isRequired,
+  multiline: PropTypes.bool,
+  rows: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.string
+  disabled: PropTypes.bool
 };
 
 TextFieldGroup.defaultProps = {

@@ -9,20 +9,24 @@ import { setCurrentUser } from "./actions/userActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import PrivateRoute from "./components/common/PrivateRoute";
+// import PrivateRoute from "./Components/common/PrivateRoute";
+import Header from "./Components/layout/Header";
+import Footer from "./Components/layout/Footer";
 
-//COMPONENTS
-import SignIn from "./components/Auth/SignIn";
-import Dashboard from "./components/Dashboard/Dashboard";
-import Lodger from "./components/Auth/SignUp/Lodger";
-import Lessor from "./components/Auth/SignUp/Lessor";
-import Navbar from "./components/layouts/NavBar";
-import Footer from "./components/layouts/Footer";
-import Account from "./components/settings/Account";
-import Properties from "./components/properties/Properties";
-import Password from "./components/settings/Password";
-import Property from "./components/properties/Property";
-import Rooms from "./components/rooms/Rooms";
+// //COMPONENTS
+import Dashboard from "./Components/Dashboard/Dashboard";
+import SignIn from "./Components/Auth/SignIn";
+import SignUp from "./Components/Auth/SignUp";
+// import SignIn from "./components/Auth/SignIn";
+// import Lodger from "./components/Auth/SignUp/Lodger";
+// import Lessor from "./components/Auth/SignUp/Lessor";
+// import Navbar from "./components/layouts/NavBar";
+// import Footer from "./components/layouts/Footer";
+// import Account from "./components/settings/Account";
+// import Properties from "./components/properties/Properties";
+// import Password from "./components/settings/Password";
+// import Property from "./components/properties/Property";
+// import Rooms from "./components/rooms/Rooms";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -40,8 +44,13 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Fragment>
-            <Navbar />
+            <Header />
+            <Footer />
+            <Route exact path="/" component={Dashboard} />
             <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/signup" component={SignUp} />
+
+            {/* <Navbar />
             <Route exact path="/signup/lodger" component={Lodger} />
             <Route exact path="/signup/lessor" component={Lessor} />
             <div>
@@ -83,7 +92,7 @@ class App extends Component {
                 </Switch>
               </div>
             </div>
-            <Footer />
+            <Footer /> */}
           </Fragment>
         </Router>
       </Provider>
