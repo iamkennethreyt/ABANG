@@ -86,12 +86,12 @@ class SignIn extends Component {
     this.props.signin(userData);
   };
 
-  onRoute = route => {
-    this.props.history.push(route);
-  };
-
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onRoute = route => {
+    this.props.history.push(route);
   };
 
   render() {

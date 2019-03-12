@@ -20,6 +20,7 @@ const myReturn = props => {
     completeaddress,
     contactinfo,
     feedbacks,
+    contactNumber,
     ratings
   } = props;
 
@@ -32,6 +33,7 @@ const myReturn = props => {
     completeaddress,
     contactinfo,
     feedbacks,
+    contactNumber,
     aveRatings: _.round(_.meanBy(ratings, o => o.rating)),
     feedbacksLength: feedbacks.length
   };
@@ -55,6 +57,7 @@ router.post(
       user: req.user.id,
       name: req.body.name,
       type: req.body.type,
+      contactNumber: req.body.contactnumber,
       completeaddress: req.body.completeaddress,
       coordinates: {
         lat: req.body.lat,

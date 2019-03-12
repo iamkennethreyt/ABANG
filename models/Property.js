@@ -33,6 +33,9 @@ const PropertySchema = new Schema({
       required: true
     }
   },
+  contactNumber: {
+    type: String
+  },
   contactinfo: [
     {
       phonenumber: {

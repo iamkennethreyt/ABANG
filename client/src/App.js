@@ -9,7 +9,7 @@ import { setCurrentUser } from "./actions/userActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-// import PrivateRoute from "./Components/common/PrivateRoute";
+import PrivateRoute from "./Components/common/PrivateRoute";
 import Header from "./Components/layout/Header";
 import Footer from "./Components/layout/Footer";
 
@@ -17,6 +17,9 @@ import Footer from "./Components/layout/Footer";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import SignIn from "./Components/Auth/SignIn";
 import SignUp from "./Components/Auth/SignUp";
+import Properties from "./Components/Properties/Properties";
+import Property from "./Components/Properties/Property";
+import About from "./Components/Dashboard/About";
 // import SignIn from "./components/Auth/SignIn";
 // import Lodger from "./components/Auth/SignUp/Lodger";
 // import Lessor from "./components/Auth/SignUp/Lessor";
@@ -49,6 +52,13 @@ class App extends Component {
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/about" component={About} />
+            <Route exact path={`/property/:id`} component={Property} />
+            <div>
+              <Switch>
+                <PrivateRoute exact path="/properties" component={Properties} />
+              </Switch>
+            </div>
 
             {/* <Navbar />
             <Route exact path="/signup/lodger" component={Lodger} />

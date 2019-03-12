@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
@@ -11,7 +12,8 @@ import Info from "@material-ui/icons/Info";
 const styles = {
   root: {
     flexGrow: 1,
-    maxWidth: 500
+    maxWidth: 500,
+    margin: 10
   }
 };
 
@@ -36,9 +38,21 @@ class Footer extends React.Component {
           indicatorColor="secondary"
           textColor="secondary"
         >
-          <Tab icon={<Map />} label="MAP" />
-          <Tab icon={<Properties />} label="PROPERTIES" />
-          <Tab icon={<Info />} label="ABOUT US" />
+          <Tab
+            icon={<Map />}
+            label="MAP"
+            onClick={() => this.props.history.push("/")}
+          />
+          <Tab
+            icon={<Properties />}
+            label="PROPERTIES"
+            onClick={() => this.props.history.push("/properties")}
+          />
+          <Tab
+            icon={<Info />}
+            label="ABOUT US"
+            onClick={() => this.props.history.push("/about")}
+          />
         </Tabs>
       </Paper>
     );
@@ -49,4 +63,4 @@ Footer.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Footer);
+export default withStyles(styles)(withRouter(Footer));

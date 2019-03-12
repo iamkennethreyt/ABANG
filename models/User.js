@@ -17,10 +17,6 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  completeaddress: {
-    type: String,
-    required: true
-  },
   password: {
     type: String,
     required: true

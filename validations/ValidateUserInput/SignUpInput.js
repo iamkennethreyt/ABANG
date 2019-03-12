@@ -7,9 +7,6 @@ module.exports = function SignUpInput(data) {
   data.name = !_.isEmpty(data.name) ? data.name : "";
   data.email = !_.isEmpty(data.email) ? data.email : "";
   data.type = !_.isEmpty(data.type) ? data.type : "";
-  data.completeaddress = !_.isEmpty(data.completeaddress)
-    ? data.completeaddress
-    : "";
   data.password = !_.isEmpty(data.password) ? data.password : "";
   data.password2 = !_.isEmpty(data.password2) ? data.password2 : "";
 
@@ -31,14 +28,6 @@ module.exports = function SignUpInput(data) {
 
   if (_.isEmpty(data.password)) {
     errors.password = "Password field is required";
-  }
-
-  if (!validator.isLength(data.completeaddress, { min: 4, max: 60 })) {
-    errors.completeaddress = "Complete Address must be 4 to 60 characters";
-  }
-
-  if (_.isEmpty(data.completeaddress)) {
-    errors.completeaddress = "Complete Address field is required";
   }
 
   if (!validator.isEmail(data.email)) {

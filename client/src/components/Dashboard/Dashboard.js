@@ -4,9 +4,19 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getProperties } from "../../actions/propertyActions";
 
+import AddLocation from "@material-ui/icons/AddLocation";
+import Typography from "@material-ui/core/Typography";
+
 import GoogleMapReact from "google-map-react";
 
-const AnyReactComponent = ({ text }) => text;
+const AnyReactComponent = ({ text, propID }) => (
+  <Link to={`/property/${propID}`}>
+    <AddLocation fontSize="large" color="secondary">
+      {text}
+    </AddLocation>
+    <Typography style={{ textAlign: "center" }}>{text}</Typography>
+  </Link>
+);
 
 class DashBoard extends Component {
   componentDidMount() {
@@ -16,8 +26,8 @@ class DashBoard extends Component {
 
   static defaultProps = {
     center: {
-      lat: 10.3157,
-      lng: 123.8854
+      lat: 10.3018,
+      lng: 123.8919
     },
     zoom: 16
   };
