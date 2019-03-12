@@ -71,42 +71,34 @@ router.post(
 // @route   GET api/rooms
 // @desc    Show all Rooms
 // @access  Private
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Room.find()
-      .populate({
-        path: "property",
-        select: "name completeaddress ratings type contactinfo user"
-      })
-      .sort({ date: -1 })
-      .then(rooms => res.json(rooms.map(room => myReturn(room))))
-      .catch(err => res.status(404).json({ property: "No properties found" }));
+router.get("/", (req, res) => {
+  Room.find()
+    .populate({
+      path: "property",
+      select: "name completeaddress ratings type contactinfo user"
+    })
+    .sort({ date: -1 })
+    .then(rooms => res.json(rooms.map(room => myReturn(room))))
+    .catch(err => res.status(404).json({ property: "No properties found" }));
 
-    // User.findById(x.property.user).then(x => {
-    //   console.log(x.name);
-    // });
-  }
-);
+  // User.findById(x.property.user).then(x => {
+  //   console.log(x.name);
+  // });
+});
 
 // @route   GET api/rooms/properties/:id
 // @desc    Show all Rooms of the properties params
 // @access  Private
-router.get(
-  "/properties/:id",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Room.find({ property: req.params.id })
-      .populate({
-        path: "property",
-        select: "name completeaddress ratings type contactinfo"
-      })
-      .sort({ date: -1 })
-      .then(rooms => res.json(rooms.map(x => myReturn(x))))
-      .catch(err => res.status(404).json({ property: "No properties found" }));
-  }
-);
+router.get("/properties/:id", (req, res) => {
+  Room.find({ property: req.params.id })
+    .populate({
+      path: "property",
+      select: "name completeaddress ratings type contactinfo"
+    })
+    .sort({ date: -1 })
+    .then(rooms => res.json(rooms.map(x => myReturn(x))))
+    .catch(err => res.status(404).json({ property: "No properties found" }));
+});
 
 // @route   GET api/rooms/properties/:id
 // @desc    Show all Rooms of the properties params

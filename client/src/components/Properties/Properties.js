@@ -14,11 +14,12 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { getOwnProperties, addProperty } from "../../actions/propertyActions";
+import moment from "moment";
 
 const styles = theme => ({
   fab: {
     position: "fixed",
-    bottom: theme.spacing.unit * 2,
+    bottom: 90,
     right: theme.spacing.unit * 2
   },
   card: {
@@ -89,6 +90,7 @@ class Properties extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
+    console.log(this.props.properties.properties);
     const { classes } = this.props;
     return (
       <div>
@@ -166,7 +168,9 @@ class Properties extends Component {
                   color="secondary"
                   gutterBottom
                 >
-                  {prop.date}
+                  {moment(prop.date)
+                    .startOf("minute")
+                    .fromNow()}
                 </Typography>
                 <Typography color="secondary" variant="h5" component="h2">
                   {prop.name}

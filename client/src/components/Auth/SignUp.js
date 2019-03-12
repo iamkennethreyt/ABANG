@@ -14,6 +14,8 @@ import CreditCardInput from "react-credit-card-input";
 import TextFieldGroup from "../common/TextFieldGroup";
 import { signup } from "../../actions/userActions";
 import _ from "lodash";
+import Snackbar from "@material-ui/core/Snackbar";
+import Fade from "@material-ui/core/Fade";
 
 const styles = theme => ({
   root: {
@@ -42,7 +44,8 @@ class VerticalLinearStepper extends React.Component {
     email: "",
     password: "",
     password2: "",
-    errors: {}
+    errors: {},
+    open: false
   };
 
   componentWillReceiveProps(nextProps) {
@@ -80,7 +83,7 @@ class VerticalLinearStepper extends React.Component {
       type: "lessor"
     };
 
-    this.props.signup(userData, this.props.history);
+    this.props.signup(userData, this.props.history, this.handleOpen);
   };
 
   onChange = e => {
@@ -89,6 +92,10 @@ class VerticalLinearStepper extends React.Component {
 
   getSteps = () => {
     return ["Terms & Condition", "Payment Method", "Information"];
+  };
+
+  handleOpen = () => {
+    this.setState({ open: true });
   };
 
   getStepContent = step => {
@@ -209,6 +216,21 @@ class VerticalLinearStepper extends React.Component {
             </Button>
           </Paper>
         )}
+        <Snackbar
+          color="success"
+          open={this.state.open}
+          onClose={() => {
+            this.setState({ open: false });
+            this.props.history.push("/signin");
+          }}
+          TransitionComponent={Fade}
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          message={
+            <span id="message-id">You Successfully Registered an Account</span>
+          }
+        />
       </div>
     );
   }

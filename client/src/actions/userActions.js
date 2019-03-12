@@ -11,10 +11,12 @@ import {
 } from "./types";
 
 // Sign up user
-export const signup = (userData, history) => dispatch => {
+export const signup = (userData, history, onSuccess) => dispatch => {
   axios
     .post("/api/users/signup", userData)
-    .then(res => history.push("/signin"))
+    .then(res => {
+      onSuccess();
+    })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

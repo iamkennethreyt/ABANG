@@ -21,7 +21,8 @@ const myReturn = props => {
     contactinfo,
     feedbacks,
     contactNumber,
-    ratings
+    ratings,
+    date
   } = props;
 
   return {
@@ -34,6 +35,7 @@ const myReturn = props => {
     contactinfo,
     feedbacks,
     contactNumber,
+    date,
     aveRatings: _.round(_.meanBy(ratings, o => o.rating)),
     feedbacksLength: feedbacks.length
   };
@@ -132,32 +134,24 @@ router.delete(
 // @route   GET api/properties
 // @desc    Show all Property
 // @access  Private
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Property.find()
-      .populate("user", "name email contactinfo")
-      .sort({ date: -1 })
-      .then(props => res.json(props.map(x => myReturn(x))))
-      .catch(err => res.status(404).json({ property: "No properties found" }));
-  }
-);
+router.get("/", (req, res) => {
+  Property.find()
+    .populate("user", "name email contactinfo")
+    .sort({ date: -1 })
+    .then(props => res.json(props.map(x => myReturn(x))))
+    .catch(err => res.status(404).json({ property: "No properties found" }));
+});
 
 // @route   GET api/properties/property/:id
 // @desc    Show single Property based on the parameter
 // @access  Private
-router.get(
-  "/property/:id",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Property.findById(req.params.id)
-      .populate("user", "name email contactinfo")
-      .populate("feedbacks.user", "name")
-      .then(props => res.json(myReturn(props)))
-      .catch(() => res.status(404).json({ property: "No properties found" }));
-  }
-);
+router.get("/property/:id", (req, res) => {
+  Property.findById(req.params.id)
+    .populate("user", "name email contactinfo")
+    .populate("feedbacks.user", "name")
+    .then(props => res.json(myReturn(props)))
+    .catch(() => res.status(404).json({ property: "No properties found" }));
+});
 
 // @route   GET api/properties/currentuser
 // @desc    Show all the properties of the current user

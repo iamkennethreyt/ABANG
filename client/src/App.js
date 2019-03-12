@@ -20,6 +20,7 @@ import SignUp from "./Components/Auth/SignUp";
 import Properties from "./Components/Properties/Properties";
 import Property from "./Components/Properties/Property";
 import About from "./Components/Dashboard/About";
+import Rooms from "./Components/Rooms/Rooms";
 // import SignIn from "./components/Auth/SignIn";
 // import Lodger from "./components/Auth/SignUp/Lodger";
 // import Lessor from "./components/Auth/SignUp/Lessor";
@@ -48,17 +49,18 @@ class App extends Component {
         <Router>
           <Fragment>
             <Header />
-            <Footer />
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/about" component={About} />
+            <Route exact path="/rooms" component={Rooms} />
             <Route exact path={`/property/:id`} component={Property} />
             <div>
               <Switch>
                 <PrivateRoute exact path="/properties" component={Properties} />
               </Switch>
             </div>
+            <Footer />
 
             {/* <Navbar />
             <Route exact path="/signup/lodger" component={Lodger} />

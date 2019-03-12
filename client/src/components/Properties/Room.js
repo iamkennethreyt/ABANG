@@ -10,6 +10,9 @@ import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 
+const numberWithCommas = x =>
+  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
 const styles = theme => ({
   card: {
     display: "flex"
@@ -27,7 +30,7 @@ const styles = theme => ({
 });
 
 const Room = props => {
-  const { classes, theme, name, price, details } = props;
+  const { classes, theme, name, price, details, amenities } = props;
 
   return (
     <Card
@@ -43,10 +46,17 @@ const Room = props => {
             {name}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            {price}
+            {`P${numberWithCommas(price)}/ month`}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
+          <Typography variant="overline" gutterBottom  color="textSecondary">
             {details}
+          </Typography>
+          <Typography variant="caption" gutterBottom color="secondary">
+            {amenities.map((amenity, index) => (
+              <span className="mr-2" key={index}>
+                &#10004; {amenity}
+              </span>
+            ))}
           </Typography>
         </CardContent>
       </div>
@@ -62,7 +72,8 @@ const Room = props => {
 Room.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
+  amenities: PropTypes.array.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(Room);
