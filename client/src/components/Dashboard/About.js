@@ -18,9 +18,11 @@ class About extends Component {
       message: this.state.message
     };
 
-    Axios.post("/api/users/sendemailtoadmin", userData)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    Axios.post("/api/properties/sendemailtoadmin", userData)
+      .then(() => alert("Successfully send message to the admin"))
+      .catch(err =>
+        alert("There's something wrong sending message to the admin")
+      );
   };
 
   onChange = e => {

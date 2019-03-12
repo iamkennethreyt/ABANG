@@ -5,7 +5,6 @@ const passport = require("passport");
 const _ = require("lodash");
 
 const key = require("../../config/key").secretOrkey;
-const transporter = require("../../config/key").transporter;
 
 const router = express.Router();
 
@@ -233,32 +232,6 @@ router.delete(
       { $pull: { contactinfo: { _id: req.body._id } } },
       { new: true }
     ).then(newProfile => res.json(newProfile));
-  }
-);
-
-// @route POST /upload
-// @desc  send email to admin
-router.post(
-  "/sendemailtoadmin",
-  // passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    const { email, message } = req.body;
-    const mailOptions = {
-      from: email,
-      to: "ABANG.SWUPHINMA@gmail.com",
-      subject: "Message from your ABANG Mobile App",
-      text: `you have a new email from ${email},
-      
-            ${message}`
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return res.status(400).json(error);
-      } else {
-        res.json({ success: info.response });
-      }
-    });
   }
 );
 
