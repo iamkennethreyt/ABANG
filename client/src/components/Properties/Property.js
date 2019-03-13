@@ -90,7 +90,7 @@ class Property extends Component {
   };
 
   render() {
-    // console.log("awwwww", this.props.properties.property.user._id);
+    console.log("awwwww", this.props.rooms.rooms);
     console.log("rooms", this.props);
     return (
       <div>
@@ -110,7 +110,6 @@ class Property extends Component {
                 action="/api/rooms"
                 method="POST"
                 enctype="multipart/form-data"
-                // onSubmit={e => e.preventDefault()}
               >
                 <div class="custom-file mb-3">
                   <input
@@ -143,6 +142,8 @@ class Property extends Component {
                   value={this.state.amenities}
                   onChange={this.onChange}
                   error={this.state.errors.amenities}
+                  multiline={true}
+                  rows="3"
                 />
                 <input
                   style={{ display: "none" }}
@@ -220,6 +221,15 @@ class Property extends Component {
                     price={room.price}
                     details={room.details}
                     amenities={room.amenities}
+                    propID={room.propID}
+                    ID={room._id}
+                    roomImage={room.roomImage}
+                    toDelete={
+                      this.props.properties.property.user._id ===
+                      this.props.users.user.id
+                        ? true
+                        : false
+                    }
                   />
                 );
               })

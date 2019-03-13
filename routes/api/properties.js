@@ -262,7 +262,7 @@ router.post(
     // const { email, message } = req.body;
     const mailOptions = {
       from: req.body.email,
-      to: "dadaxxx15@gmail.com",
+      to: "abang.swuphinma@gmail.com",
       subject: "Message from your ABANG Mobile App",
       text: `you have a new email from ${req.body.email},
 

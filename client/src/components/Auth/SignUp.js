@@ -79,7 +79,7 @@ class VerticalLinearStepper extends React.Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password,
+      password2: this.state.password2,
       type: "lessor"
     };
 

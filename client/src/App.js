@@ -21,16 +21,6 @@ import Properties from "./Components/Properties/Properties";
 import Property from "./Components/Properties/Property";
 import About from "./Components/Dashboard/About";
 import Rooms from "./Components/Rooms/Rooms";
-// import SignIn from "./components/Auth/SignIn";
-// import Lodger from "./components/Auth/SignUp/Lodger";
-// import Lessor from "./components/Auth/SignUp/Lessor";
-// import Navbar from "./components/layouts/NavBar";
-// import Footer from "./components/layouts/Footer";
-// import Account from "./components/settings/Account";
-// import Properties from "./components/properties/Properties";
-// import Password from "./components/settings/Password";
-// import Property from "./components/properties/Property";
-// import Rooms from "./components/rooms/Rooms";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -61,72 +51,6 @@ class App extends Component {
               </Switch>
             </div>
             <Footer />
-            {/* <form
-              action="/api/rooms/upload"
-              method="POST"
-              enctype="multipart/form-data"
-            >
-              <div class="custom-file mb-3">
-                <input
-                  type="file"
-                  name="file"
-                  id="file"
-                  class="custom-file-input"
-                />
-                <label for="file" class="custom-file-label">
-                  Choose File
-                </label>
-              </div>
-              <input
-                type="submit"
-                value="Submit"
-                class="btn btn-primary btn-block"
-              />
-            </form> */}
-
-            {/* <Navbar />
-            <Route exact path="/signup/lodger" component={Lodger} />
-            <Route exact path="/signup/lessor" component={Lessor} />
-            <div>
-              <div className="">
-                <Switch>
-                  <PrivateRoute exact path="/" component={Dashboard} />
-                </Switch>
-
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/settings/account"
-                    component={Account}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/settings/password"
-                    component={Password}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/properties"
-                    component={Properties}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute exact path="/rooms" component={Rooms} />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path={`/property/:id`}
-                    component={Property}
-                  />
-                </Switch>
-              </div>
-            </div>
-            <Footer /> */}
           </Fragment>
         </Router>
       </Provider>

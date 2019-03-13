@@ -10,7 +10,7 @@ module.exports = function SignUpInput(data) {
   data.password = !_.isEmpty(data.password) ? data.password : "";
   data.password2 = !_.isEmpty(data.password2) ? data.password2 : "";
 
-  if (!_.isEqual(data.password2, data.password)) {
+  if (!validator.equals(data.password2, data.password)) {
     errors.password2 = "password must match";
   }
 

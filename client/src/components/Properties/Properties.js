@@ -133,20 +133,22 @@ class Properties extends Component {
                 onChange={this.onChange}
                 error={this.state.errors.type}
               />
-              <TextFieldGroup
-                placeholder="Longitude Coordinates"
-                name="long"
-                value={this.state.long}
-                onChange={this.onChange}
-                error={this.state.errors.long}
-              />
-              <TextFieldGroup
-                placeholder="Latitude Coordinates"
-                name="lat"
-                value={this.state.lat}
-                onChange={this.onChange}
-                error={this.state.errors.lat}
-              />
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <TextFieldGroup
+                  placeholder="Longitude Coordinates"
+                  name="long"
+                  value={this.state.long}
+                  onChange={this.onChange}
+                  error={this.state.errors.long}
+                />
+                <TextFieldGroup
+                  placeholder="Latitude Coordinates"
+                  name="lat"
+                  value={this.state.lat}
+                  onChange={this.onChange}
+                  error={this.state.errors.lat}
+                />
+              </div>
               <Button
                 type="submit"
                 fullWidth
