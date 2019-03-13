@@ -91,7 +91,7 @@ class Property extends Component {
 
   render() {
     // console.log("awwwww", this.props.properties.property.user._id);
-    console.log("rooms", this.props.rooms);
+    console.log("rooms", this.props);
     return (
       <div>
         {this.props.properties.loading ||
@@ -107,8 +107,22 @@ class Property extends Component {
                   border: "1px #ccc solid",
                   padding: ".7rem"
                 }}
-                onSubmit={this.onSubmit}
+                action="/api/rooms"
+                method="POST"
+                enctype="multipart/form-data"
+                // onSubmit={e => e.preventDefault()}
               >
+                <div class="custom-file mb-3">
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    class="custom-file-input"
+                  />
+                  <label for="file" class="custom-file-label">
+                    Choose File
+                  </label>
+                </div>
                 <TextFieldGroup
                   placeholder="Name of the Room"
                   name="name"
@@ -129,6 +143,12 @@ class Property extends Component {
                   value={this.state.amenities}
                   onChange={this.onChange}
                   error={this.state.errors.amenities}
+                />
+                <input
+                  style={{ display: "none" }}
+                  placeholder="properyyyy"
+                  name="property"
+                  value={this.props.properties.property._id}
                 />
                 <TextFieldGroup
                   placeholder="Other details here"

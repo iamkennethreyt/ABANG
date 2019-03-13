@@ -30,7 +30,7 @@ const styles = theme => ({
 });
 
 const Room = props => {
-  const { classes, theme, name, price, details, amenities } = props;
+  const { classes, name, price, details, amenities, roomImage } = props;
 
   return (
     <Card
@@ -48,7 +48,7 @@ const Room = props => {
           <Typography variant="subtitle1" color="textSecondary">
             {`P${numberWithCommas(price)}/ month`}
           </Typography>
-          <Typography variant="overline" gutterBottom  color="textSecondary">
+          <Typography variant="overline" gutterBottom color="textSecondary">
             {details}
           </Typography>
           <Typography variant="caption" gutterBottom color="secondary">
@@ -62,7 +62,7 @@ const Room = props => {
       </div>
       <CardMedia
         className={classes.cover}
-        image={`https://static01.nyt.com/images/2018/09/23/realestate/23fix1/oakImage-1536872349845-articleLarge.jpg?quality=75&auto=webp&disable=upscale`}
+        image={`http://localhost:5000/api/rooms/image/${roomImage}`}
         title="Live from space album cover"
       />
     </Card>

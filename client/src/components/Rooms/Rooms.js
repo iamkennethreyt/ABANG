@@ -23,11 +23,12 @@ class Rooms extends Component {
           this.props.rooms.rooms.map((room, i) => {
             return (
               <Room
-              key={i}
+                key={i}
                 name={room.name}
                 price={room.price}
                 details={room.details}
                 amenities={room.amenities}
+                roomImage={room.roomImage}
               />
             );
           })

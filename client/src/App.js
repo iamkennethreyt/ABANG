@@ -61,6 +61,28 @@ class App extends Component {
               </Switch>
             </div>
             <Footer />
+            {/* <form
+              action="/api/rooms/upload"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <div class="custom-file mb-3">
+                <input
+                  type="file"
+                  name="file"
+                  id="file"
+                  class="custom-file-input"
+                />
+                <label for="file" class="custom-file-label">
+                  Choose File
+                </label>
+              </div>
+              <input
+                type="submit"
+                value="Submit"
+                class="btn btn-primary btn-block"
+              />
+            </form> */}
 
             {/* <Navbar />
             <Route exact path="/signup/lodger" component={Lodger} />

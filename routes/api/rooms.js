@@ -3,18 +3,69 @@ const router = express.Router();
 const passport = require("passport");
 const _ = require("lodash");
 
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+const path = require("path");
+
+const AddRoom = require("../../validations/ValidateRoomInput/AddRoom");
+
+const mongoURI = "mongodb://localhost:27017/abang";
+
+const conn = mongoose.createConnection(mongoURI);
+
+let gfs;
+
+conn.once("open", () => {
+  // Init stream
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("uploads");
+});
+
 const Room = require("../../models/Room");
 const Property = require("../../models/Property");
 const User = require("../../models/User");
 
-const AddRoom = require("../../validations/ValidateRoomInput/AddRoom");
+const storage = new GridFsStorage({
+  url: mongoURI,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString("hex") + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: "uploads"
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+
+const upload = multer({ storage });
 
 const myReturn = param => {
-  const { _id, amenities, name, type, date, price, property, details } = param;
+  const {
+    _id,
+    amenities,
+    name,
+    type,
+    date,
+    price,
+    property,
+    details,
+    roomImage
+  } = param;
 
   return {
     _id,
     amenities,
+    roomImage,
     name,
     roomtype: type,
     propname: property.name,
@@ -35,24 +86,17 @@ const myReturn = param => {
 // @access  Private
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  upload.single("file"),
+  // passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = AddRoom(req.body);
 
-    // Check Validation
     if (!isValid) {
       return res.status(400).json(errors);
     }
-
     Property.findById(req.body.property, (err, prop) => {
       if (err) {
         return res.status(400).json({ property: "Property not found" });
-      }
-
-      if (prop.user != req.user.id) {
-        return res
-          .status(400)
-          .json({ user: "This user is not able to add this property" });
       }
 
       const newData = new Room({
@@ -60,9 +104,10 @@ router.post(
         name: req.body.name,
         details: req.body.details,
         price: req.body.price,
-        amenities: req.body.amenities.split(",")
+        amenities: req.body.amenities.split(","),
+        roomImage: req.file.filename
       });
-
+      upload.single("file");
       newData.save().then(room => res.json(room));
     });
   }
@@ -151,5 +196,54 @@ router.delete(
     Room.findByIdAndDelete(req.params.id).then(data => res.json(data));
   }
 );
+
+// @route POST /upload
+// @desc  Uploads file to DB
+// router.post(
+//   "/upload",
+//   upload.single("file")
+//   // passport.authenticate("jwt", { session: false }),
+
+//   // (req, res) => {
+//   //   const user = {};
+
+//   //   user.image = req.file.filename;
+
+//   //   User.findOneAndUpdate(
+//   //     { _id: req.user.id },
+//   //     { $set: user },
+//   //     { new: true }
+//   //   ).then(user => res.json(user));
+//   // }
+// );
+// @route POST /upload
+// @desc  Uploads file to DB
+// router.post("/upload", upload.single("file"), (req, res) => {
+//   // res.json({ file: req.file });
+//   res.redirect("/");
+// });
+
+// @route GET /image/:filename
+// @desc Display Image
+router.get("/image/:filename", (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    // Check if file
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        err: "No file exists"
+      });
+    }
+    // Check if image
+    if (file.contentType === "image/jpeg" || file.contentType === "image/png") {
+      // Read output to browser
+      const readstream = gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+    } else {
+      res.status(404).json({
+        err: "Not an image"
+      });
+    }
+  });
+});
 
 module.exports = router;
