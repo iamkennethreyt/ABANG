@@ -103,12 +103,8 @@ class VerticalLinearStepper extends React.Component {
       case 0:
         return (
           <Typography variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum
-            maiores mollitia accusantium velit veritatis laboriosam, nisi
-            possimus unde id fuga atque blanditiis ipsum distinctio autem
-            recusandae odio est sunt quos modi consequatur reprehenderit nulla
-            obcaecati. Sit, asperiores dolores atque nulla ratione quia
-            accusantium eos modi libero recusandae vel praesentium nostrum!
+            These Terms govern your use of Abang and the products, features,
+            app, services, technologies and software we offer.
           </Typography>
         );
       case 1:

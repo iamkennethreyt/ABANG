@@ -42,7 +42,7 @@ class About extends Component {
         </Typography>
         <Typography gutterBottom align="justify">
           {`
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati voluptate assumenda explicabo animi reiciendis blanditiis, asperiores natus saepe enim minus vero rem! Deserunt natus voluptatem reiciendis consequuntur, nisi porro accusantium? Voluptatum reiciendis facere iusto exercitationem minima illo corrupti ducimus, expedita dolore perspiciatis commodi id esse earum voluptatibus, at assumenda.
+          This Abang application is made to help the users to find boardinghouse and other properties.
         `}
         </Typography>
         <Typography align="center" variant="title" gutterBottom>
