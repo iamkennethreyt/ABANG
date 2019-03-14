@@ -5,6 +5,7 @@ import {
   ROOMS_LOADING,
   ADD_ROOM,
   GET_ROOMS,
+  GET_ROOM,
   DELETE_ROOM
 } from "./types";
 
@@ -43,6 +44,44 @@ export const getRooms = () => dispatch => {
       dispatch({
         type: {},
         payload: {}
+      })
+    );
+};
+
+//Get rooms  by id property
+export const getRoom = id => dispatch => {
+  dispatch(setRoomLoading());
+  axios
+    .get(`/api/rooms/room/${id}`)
+    .then(res =>
+      dispatch({
+        type: GET_ROOM,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: {},
+        payload: {}
+      })
+    );
+};
+
+//Get rooms  by id property
+export const bookRoom = data => dispatch => {
+  axios
+    .put(`/api/properties/booking/${data.id}`, data)
+    .then(
+      res => console.log(res)
+      // dispatch({
+      //   type: GET_ROOM,
+      //   payload: res.data
+      // })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
       })
     );
 };

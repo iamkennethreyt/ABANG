@@ -30,12 +30,15 @@ const styles = theme => ({
     flex: ""
   },
   cover: {
-    width: 170
+    width: 200
   }
 });
 
 const Room = props => {
+  // console.log();
+  let displaybutton;
   const {
+    propname,
     classes,
     name,
     price,
@@ -46,8 +49,35 @@ const Room = props => {
     toDelete,
     ID
   } = props;
+  if (toDelete) {
+    displaybutton = (
+      <Button
+        type="button"
+        variant="outlined"
+        color="secondary"
+        style={{ marginTop: ".8rem" }}
+        onClick={() => {
+          props.deleteRoom(ID);
+        }}
+      >
+        Delete
+      </Button>
+    );
+  } else {
+    displaybutton = (
+      <Button
+        type="button"
+        variant="outlined"
+        color="secondary"
+        style={{ marginTop: ".8rem" }}
+        onClick={() => props.history.push(`/booking/${ID}`)}
+      >
+        Book Now
+      </Button>
+    );
+  }
   return (
-    <div onClick={() => props.history.push(`/property/${propID}`)}>
+    <div>
       <Card
         style={{
           justifyContent: "space-between",
@@ -57,6 +87,9 @@ const Room = props => {
       >
         <div>
           <CardContent className={classes.content}>
+            <Typography variant="overline" gutterBottom color="textSecondary">
+              {propname}
+            </Typography>
             <Typography component="h5" variant="h5">
               {name}
             </Typography>
@@ -74,24 +107,12 @@ const Room = props => {
                 </span>
               ))}
             </Typography>
-            {toDelete ? (
-              <Button
-                type="button"
-                variant="outlined"
-                color="secondary"
-                style={{ marginTop: ".8rem" }}
-                onClick={() => {
-                  props.deleteRoom(ID);
-                }}
-              >
-                Delete
-              </Button>
-            ) : null}
+            {props.match.path === "/booking/:id" ? null : displaybutton}
           </CardContent>
         </div>
         <CardMedia
           className={classes.cover}
-          image={`http://192.168.43.100:5000/api/rooms/image/${roomImage}`}
+          image={`/api/rooms/image/${roomImage}`}
           title="Live from space album cover"
         />
       </Card>

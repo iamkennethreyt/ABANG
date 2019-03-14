@@ -194,6 +194,14 @@ class Properties extends Component {
                 >
                   View {prop.type}
                 </Button>
+                <Button
+                  size="small"
+                  onClick={() =>
+                    this.props.history.push(`/properties/booking/${prop._id}`)
+                  }
+                >
+                  View Books ( {prop.books.length} )
+                </Button>
               </CardActions>
             </Card>
           );

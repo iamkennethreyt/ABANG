@@ -21,6 +21,8 @@ import Properties from "./Components/Properties/Properties";
 import Property from "./Components/Properties/Property";
 import About from "./Components/Dashboard/About";
 import Rooms from "./Components/Rooms/Rooms";
+import Booking from "./Components/Booking/Booking";
+import PropertyBooking from "./Components/Properties/PropertyBooking";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -44,7 +46,13 @@ class App extends Component {
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/about" component={About} />
             <Route exact path="/rooms" component={Rooms} />
+            <Route exact path="/booking/:id" component={Booking} />
             <Route exact path={`/property/:id`} component={Property} />
+            <Route
+              exact
+              path={`/properties/booking/:id`}
+              component={PropertyBooking}
+            />
             <div>
               <Switch>
                 <PrivateRoute exact path="/properties" component={Properties} />

@@ -75,6 +75,7 @@ const myReturn = param => {
     price,
     date,
     details,
+    property,
     contactinfo: property.contactinfo,
     user: property.user,
     aveRatings: _.round(_.meanBy(property.ratings, o => o.rating))
@@ -148,44 +149,52 @@ router.get("/properties/:id", (req, res) => {
 // @route   GET api/rooms/properties/:id
 // @desc    Show all Rooms of the properties params
 // @access  Private
-router.get(
-  "/room/:id",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Room.findById(req.params.id)
-      .populate({
-        path: "property",
-        select: "name completeaddress ratings type user contactinfo"
-      })
-      .sort({ date: -1 })
-      .then(rooms => {
-        User.findById(rooms.property.user, (err, user) => {
-          if (err) {
-            return res.status(400).json({ err });
-          }
-          const { _id, amenities, name, type, date, price, property } = rooms;
+router.get("/room/:id", (req, res) => {
+  Room.findById(req.params.id)
+    .populate({
+      path: "property",
+      select: "name completeaddress ratings type user contactinfo"
+    })
+    .sort({ date: -1 })
+    .then(rooms => {
+      User.findById(rooms.property.user, (err, user) => {
+        if (err) {
+          return res.status(400).json({ err });
+        }
+        const {
+          _id,
+          amenities,
+          name,
+          type,
+          date,
+          price,
+          property,
+          roomImage
+        } = rooms;
 
-          res.json({
-            _id,
-            amenities,
-            roomname: name,
-            roomtype: type,
-            propname: property.name,
-            proptype: property.type,
-            address: property.completeaddress,
-            contactinfo: property.contactinfo,
-            price,
-            date,
-            owner: user.name,
-            aveRatings: _.round(_.meanBy(property.ratings, o => o.rating))
-          });
+        res.json({
+          _id,
+          amenities,
+          roomname: name,
+          roomtype: type,
+          propname: property.name,
+          proptype: property.type,
+          address: property.completeaddress,
+          contactinfo: property.contactinfo,
+          propertyid: property._id,
+          price,
+          date,
+          roomImage,
+          owner: user.name,
+          owneremail: user.email,
+          aveRatings: _.round(_.meanBy(property.ratings, o => o.rating))
         });
+      });
 
-        // res.json(myReturn(rooms));
-      })
-      .catch(err => res.status(404).json({ property: "No properties found" }));
-  }
-);
+      // res.json(myReturn(rooms));
+    })
+    .catch(err => res.status(404).json({ property: "No properties found" }));
+});
 
 // @route   DELETE api/rooms/:id
 // @desc    Delete Single Room

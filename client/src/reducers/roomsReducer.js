@@ -1,6 +1,7 @@
 import {
   ROOMS_LOADING,
   GET_ROOMS,
+  GET_ROOM,
   ADD_ROOM,
   DELETE_ROOM
 } from "../actions/types";
@@ -23,6 +24,12 @@ export default function(state = initialState, action) {
         ...state,
         loading: false,
         rooms: action.payload
+      };
+    case GET_ROOM:
+      return {
+        ...state,
+        loading: false,
+        room: action.payload
       };
     case ADD_ROOM:
       return {

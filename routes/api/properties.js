@@ -22,7 +22,8 @@ const myReturn = props => {
     feedbacks,
     contactNumber,
     ratings,
-    date
+    date,
+    books
   } = props;
 
   return {
@@ -36,6 +37,7 @@ const myReturn = props => {
     feedbacks,
     contactNumber,
     date,
+    books,
     aveRatings: _.round(_.meanBy(ratings, o => o.rating)),
     feedbacksLength: feedbacks.length
   };
@@ -148,7 +150,7 @@ router.get("/", (req, res) => {
 router.get("/property/:id", (req, res) => {
   Property.findById(req.params.id)
     .populate("user", "name email contactinfo")
-    .populate("feedbacks.user", "name")
+    .populate("books.room", "name roomImage price")
     .then(props => res.json(myReturn(props)))
     .catch(() => res.status(404).json({ property: "No properties found" }));
 });
@@ -161,7 +163,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Property.find({ user: req.user.id })
-      .populate("feedbacks.user", "name")
+      // .populate("books")
       .then(props => res.json(props.map(x => myReturn(x))))
       .catch(err => res.status(404).json({ property: "No properties found" }));
   }
@@ -251,6 +253,64 @@ router.put(
   }
 );
 
+// @route   PUT api/properties/feedback/:id
+// @desc    Add feedback
+// @access  Private
+router.put("/booking/:id", (req, res) => {
+  if (_.isEmpty(req.body.name)) {
+    return res.status(400).json({ name: "name field is required" });
+  }
+
+  if (_.isEmpty(req.body.room)) {
+    return res.status(400).json({ room: "room field is required" });
+  }
+
+  if (_.isEmpty(req.body.email)) {
+    return res.status(400).json({ email: "email field is required" });
+  }
+
+  if (_.isEmpty(req.body.phonenumber)) {
+    return res
+      .status(400)
+      .json({ phonenumber: "phonenumber field is required" });
+  }
+
+  Property.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $push: {
+        books: {
+          room: req.body.room,
+          email: req.body.email,
+          name: req.body.name,
+          details: req.body.details,
+          phonenumber: req.body.phonenumber
+        },
+        $sort: { date: -1 }
+      }
+    },
+    { new: true }
+  )
+    .populate("books.user", "name")
+    .then(newProf => {
+      const mailOptions = {
+        from: req.body.email,
+        to: req.body.owneremail,
+        subject: `Message from ${req.body.name}`,
+        text: req.body.details
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("error", error);
+        } else {
+          console.log("success", info);
+        }
+      });
+      res.json(myReturn(newProf));
+    });
+});
+
 // @route POST /upload
 // @desc  send email to admin
 const transporter = require("../../config/key").transporter;
@@ -278,4 +338,35 @@ router.post(
     });
   }
 );
+
+// // @route POST /upload
+// // @desc  send email
+// router.post(
+//   "/sendemail",
+//   // passport.authenticate("jwt", { session: false }),
+//   (req, res) => {
+//     const {
+//       applicantName,
+//       applicantEmail,
+//       companyname,
+//       message,
+//       owneremail
+//     } = req.body;
+
+//     const mailOptions = {
+//       from: applicantEmail,
+//       to: owneremail,
+//       subject: `Message from ${applicantName}`,
+//       text: message
+//     };
+
+// transporter.sendMail(mailOptions, (error, info) => {
+//   if (error) {
+//     return res.status(400).json(error);
+//   } else {
+//     res.json({ success: info.response });
+//   }
+// });
+//   }
+// );
 module.exports = router;

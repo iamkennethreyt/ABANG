@@ -46,6 +46,36 @@ const PropertySchema = new Schema({
       }
     }
   ],
+
+  books: [
+    {
+      room: {
+        type: Schema.Types.ObjectId,
+        ref: "rooms",
+        required: true
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      email: {
+        type: String,
+        required: true
+      },
+      phonenumber: {
+        type: String,
+        required: true
+      },
+      details: {
+        type: String,
+        required: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   feedbacks: [
     {
       user: {
