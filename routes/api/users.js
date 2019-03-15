@@ -8,6 +8,12 @@ const key = require("../../config/key").secretOrkey;
 
 const router = express.Router();
 
+const Nexmo = require("nexmo");
+const nexmo = new Nexmo({
+  apiKey: "d467036f",
+  apiSecret: "xR9O4Lh1VdJtidnO"
+});
+
 //load validation
 const SignInInput = require("../../validations/ValidateUserInput/SignInInput");
 const SignUpInput = require("../../validations/ValidateUserInput/SignUpInput");
@@ -234,5 +240,14 @@ router.delete(
     ).then(newProfile => res.json(newProfile));
   }
 );
+
+//@route    GET /api/classsections/attendance/:classid/:studentid
+//@desc     Return attendance of the student
+//@access   public
+router.post("/sendsms/", (req, res) => {
+  let sms = `you have sms from ${req.body.name} - ${req.body.number},
+  ${req.body.message}`;
+  nexmo.message.sendSms("ABANG", `639663568932`, sms);
+});
 
 module.exports = router;

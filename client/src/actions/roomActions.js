@@ -71,13 +71,10 @@ export const getRoom = id => dispatch => {
 export const bookRoom = data => dispatch => {
   axios
     .put(`/api/properties/booking/${data.id}`, data)
-    .then(
-      res => console.log(res)
-      // dispatch({
-      //   type: GET_ROOM,
-      //   payload: res.data
-      // })
-    )
+    .then(() => {
+      alert("ROOM SUCCESSFULLY BOOKED");
+      window.location.href = "";
+    })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
