@@ -14,6 +14,7 @@ import Axios from "axios";
 import { deleteRoom } from "../../actions/roomActions";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
+import Switch from "@material-ui/core/Switch";
 
 const numberWithCommas = x =>
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -37,6 +38,7 @@ const styles = theme => ({
 const Room = props => {
   // console.log();
   let displaybutton;
+  let displayswitch;
   const {
     propname,
     classes,
@@ -47,7 +49,8 @@ const Room = props => {
     roomImage,
     propID,
     toDelete,
-    ID
+    ID,
+    status
   } = props;
   if (toDelete) {
     displaybutton = (
@@ -62,6 +65,17 @@ const Room = props => {
       >
         Delete
       </Button>
+    );
+
+    displayswitch = (
+      <Switch
+        onChange={e => {
+          Axios.put(`/api/rooms/changestatus/${ID}`, {
+            status: e.target.checked
+          });
+        }}
+        defaultChecked={status}
+      />
     );
   } else {
     displaybutton = (
@@ -108,6 +122,7 @@ const Room = props => {
               ))}
             </Typography>
             {props.match.path === "/booking/:id" ? null : displaybutton}
+            {props.match.path === "/booking/:id" ? null : displayswitch}
           </CardContent>
         </div>
         <CardMedia

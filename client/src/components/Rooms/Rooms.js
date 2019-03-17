@@ -99,6 +99,7 @@ class Rooms extends Component {
           <Spinner />
         ) : (
           rooms
+            .filter(room => room.status)
             .filter(room => room.price <= this.state.price)
             .map((room, i) => {
               return (

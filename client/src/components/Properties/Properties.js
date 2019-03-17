@@ -90,7 +90,6 @@ class Properties extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    console.log(this.props.properties.properties);
     const { classes } = this.props;
     return (
       <div>

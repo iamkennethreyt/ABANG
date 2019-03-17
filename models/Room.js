@@ -26,6 +26,10 @@ const PropertySchema = new Schema({
   roomImage: {
     type: String
   },
+  status: {
+    type: Boolean,
+    default: true
+  },
   images: [
     {
       path: {

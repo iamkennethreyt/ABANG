@@ -224,6 +224,7 @@ class Property extends Component {
                     propID={room.propID}
                     ID={room._id}
                     roomImage={room.roomImage}
+                    status={room.status}
                     toDelete={
                       this.props.properties.property.user._id ===
                       this.props.users.user.id

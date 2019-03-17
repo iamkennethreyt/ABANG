@@ -59,7 +59,8 @@ const myReturn = param => {
     price,
     property,
     details,
-    roomImage
+    roomImage,
+    status
   } = param;
 
   return {
@@ -76,6 +77,7 @@ const myReturn = param => {
     date,
     details,
     property,
+    status,
     contactinfo: property.contactinfo,
     user: property.user,
     aveRatings: _.round(_.meanBy(property.ratings, o => o.rating))
@@ -111,6 +113,18 @@ router.post(
       upload.single("file");
       newData.save().then(room => res.json(room));
     });
+  }
+);
+
+router.put(
+  "/changestatus/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Room.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { status: req.body.status } },
+      { new: true }
+    ).then(user => res.json(user));
   }
 );
 
