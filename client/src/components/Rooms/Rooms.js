@@ -31,7 +31,9 @@ class Rooms extends Component {
   state = {
     onsearch: "",
     price: 1000000,
-    open: false
+    lowprice: 0,
+    open: false,
+    open2: false
   };
 
   componentDidMount() {
@@ -46,12 +48,18 @@ class Rooms extends Component {
     this.setState({ open: false });
   };
 
+  handleClose2 = () => {
+    this.setState({ open2: false });
+  };
+
   handleOpen = () => {
     this.setState({ open: true });
   };
+  handleOpen2 = () => {
+    this.setState({ open2: true });
+  };
 
   render() {
-    console.log(this.state.price);
     const fused = new Fuse(this.props.rooms.rooms, options);
     let rooms =
       this.state.onsearch === ""
@@ -69,7 +77,36 @@ class Rooms extends Component {
 
         <FormControl fullWidth>
           <InputLabel htmlFor="demo-controlled-open-select">
-            Range Price
+            Lowest amount
+          </InputLabel>
+          <Select
+            open={this.state.open2}
+            onClose={this.handleClose2}
+            onOpen={this.handleOpen2}
+            value={this.state.lowprice}
+            onChange={e => this.setState({ lowprice: e.target.value })}
+            inputProps={{
+              name: "lowprice",
+              id: "demo-controlled-open-select"
+            }}
+          >
+            <MenuItem value={0}>
+              <em>All</em>
+            </MenuItem>
+            <MenuItem value={2000}>2,000</MenuItem>
+            <MenuItem value={3000}>3000</MenuItem>
+            <MenuItem value={4000}>4,000</MenuItem>
+            <MenuItem value={5000}>5,000</MenuItem>
+            <MenuItem value={6000}>6,000</MenuItem>
+            <MenuItem value={8000}>8,000</MenuItem>
+            <MenuItem value={10000}>10,000</MenuItem>
+            <MenuItem value={12000}>12,000</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel htmlFor="demo-controlled-open-select">
+            Highiest amount
           </InputLabel>
           <Select
             open={this.state.open}
@@ -100,7 +137,11 @@ class Rooms extends Component {
         ) : (
           rooms
             .filter(room => room.status)
-            .filter(room => room.price <= this.state.price)
+            .filter(
+              room =>
+                room.price <= this.state.price &&
+                room.price >= this.state.lowprice
+            )
             .map((room, i) => {
               return (
                 <Room
