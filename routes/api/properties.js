@@ -5,6 +5,7 @@ const _ = require("lodash");
 
 // Advertisement model
 const Property = require("../../models/Property");
+const Room = require("../../models/Room");
 
 // Validation
 const AddProperty = require("../../validations/ValidatePropertyInput/AddProperty");
@@ -275,40 +276,51 @@ router.put("/booking/:id", (req, res) => {
       .json({ phonenumber: "phonenumber field is required" });
   }
 
-  Property.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $push: {
-        books: {
-          room: req.body.room,
-          email: req.body.email,
-          name: req.body.name,
-          details: req.body.details,
-          phonenumber: req.body.phonenumber
-        },
-        $sort: { date: -1 }
-      }
-    },
+  Room.findOneAndUpdate(
+    { _id: req.body.room },
+    { $set: { status: false } },
     { new: true }
-  )
-    .populate("books.user", "name")
-    .then(newProf => {
-      const mailOptions = {
-        from: req.body.email,
-        to: req.body.owneremail,
-        subject: `Message from ${req.body.name}`,
-        text: req.body.details
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log("error", error);
-        } else {
-          console.log("success", info);
+  ).then(() => {
+    Property.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: {
+          books: {
+            room: req.body.room,
+            email: req.body.email,
+            name: req.body.name,
+            details: req.body.details,
+            phonenumber: req.body.phonenumber
+          },
+          $sort: { date: -1 }
         }
+      },
+      { new: true }
+    )
+      .populate("books.user", "name")
+      .then(newProf => {
+        const mailOptions = {
+          from: req.body.email,
+          to: req.body.owneremail,
+          subject: `Message from ${req.body.name}`,
+          text: req.body.details
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.log("error", error);
+          } else {
+            console.log("success", info);
+          }
+          Room.findOneAndUpdate(
+            { _id: req.body.room },
+            { $set: { status: false } },
+            { new: true }
+          );
+        });
+        res.json(myReturn(newProf));
       });
-      res.json(myReturn(newProf));
-    });
+  });
 });
 
 // @route POST /upload

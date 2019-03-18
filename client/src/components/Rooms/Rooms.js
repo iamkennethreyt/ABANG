@@ -118,6 +118,7 @@ class Rooms extends Component {
               );
             })
         )}
+        <div style={{ height: 100 }} />
       </section>
     );
   }
